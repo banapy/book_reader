@@ -7,8 +7,8 @@ module.exports = {
     alias: {
       '@': path.resolve(__dirname, 'src'),
     },
-    external:{
-      ePub:"ePub",
-    }
+    external: {
+      ePub: "ePub",
+    },
   },
 };

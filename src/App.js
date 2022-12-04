@@ -2,15 +2,16 @@ import {
   createBrowserRouter,
   RouterProvider,
   Route,
+  createHashRouter,
 } from "react-router-dom";
 import Home from './views/home'
 import Login from './views/login'
 import BookViewer from './views/bookViewer'
 import Error from './views/error'
 import { RecoilRoot } from "recoil";
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
-    path: "/home",
+    path: "/",
     element: <Home></Home>,
     errorElement: <Error />,
   },
