@@ -25,7 +25,7 @@ jobs:
           username: ${{ secrets.HUAWEI_USERNAME }} 
           port: ${{ secrets.SSH_PORT }} 
           password: ${{ secrets.HUAWEI_PASSWORD }}
-          source: "./dist/*" 
+          source: "./build" 
           target: "/usr/share/nginx/html/bookRoom"
           strip_components: 2
           overwrite: true
