@@ -1,4 +1,4 @@
-name: learn-github-actions
+name: 部署book_reader项目
 on:
   workflow_dispatch:
   push:
@@ -11,6 +11,9 @@ jobs:
       
       - name: 配置node语言环境
         uses: actions/setup-node@v3.5.1
+        with:
+          ndoe-version: 16.3.1
+          cache: yarn
 
       - name: 构建程序
         run:  npm run build
