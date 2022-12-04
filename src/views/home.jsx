@@ -1,18 +1,15 @@
 import { Suspense, useEffect, useRef, useState } from "react";
-import Book from "@/components/Book";
 import MyHeader from "@/components/Header";
 export default function Index(props) {
 	const [curState, setCurState] = useState("书架");
-	const [browser, setBrowser] = useState(false);
-	useEffect(() => {
-		setBrowser(true);
-	}, []);
+	const navigate = useNavigate();
 	const bookProxyList = [
 		{
 			id: 0,
 			type: "链接",
 			info: {
 				url: "https://react-reader.metabits.no/files/alice.epub",
+				cover: "http://img3m9.ddimg.cn/26/10/27669239-1_w_1.jpg",
 				bookName: "alice",
 			},
 		},
@@ -21,47 +18,45 @@ export default function Index(props) {
 			type: "链接",
 			info: {
 				url: "https://s3.amazonaws.com/moby-dick/moby-dick.epub",
+				cover: "http://img3m5.ddimg.cn/74/8/1137309005-1_w_1.jpg",
 				bookName: "moby-dick",
 			},
 		},
 	];
-	let mainPage;
-	if (curState === "书架") {
-		mainPage = (
-			<div className="container-sm">
-				<MyHeader></MyHeader>
-				<div>
-					<ImportBook></ImportBook>
-				</div>
-				<div>
-					<ul className="list-group">
-						{bookProxyList.map((x) => {
-							return (
-								<li
-									key={x.id}
-									className="list-group-item d-flex justify-content-between align-items-center"
-									onClick={(e) => setCurState("读书")}
-								>
-									{x.info.bookName}
-								</li>
-							);
-						})}
-					</ul>
-				</div>
+	const onClickBook = (bookProxy) => {
+		navigate("/bookViewer/" + bookProxy.id);
+	};
+	let mainPage = (
+		<Container>
+			<MyHeader></MyHeader>
+			<div className="my-2">
+				<ImportBook></ImportBook>
 			</div>
-		);
-	} else if (curState == "读书") {
-		// mainPage = <BookViewer bookProxy={bookProxy}></BookViewer>;
-	}
+			<div>
+				<ListGroup variant="flush">
+					{bookProxyList.map((x) => {
+						return (
+							<ListGroup.Item key={x.id} onClick={(e) => onClickBook(x)}>
+								<div className="d-flex align-items-center">
+									<img
+										src={x.info.cover}
+										alt=""
+										className=""
+										style={{ width: "20vw" }}
+									/>
+									<div className="h-100">
+										<h6>{x.info.bookName}</h6>
+									</div>
+								</div>
+							</ListGroup.Item>
+						);
+					})}
+				</ListGroup>
+			</div>
+		</Container>
+	);
 
 	return <>{mainPage}</>;
-}
-export function BookViewer(props) {
-	return (
-		<>
-			<Book proxy={props.bookProxy}></Book>
-		</>
-	);
 }
 function ImportBook(props) {
 	const startImport = () => {
@@ -73,7 +68,7 @@ function ImportBook(props) {
 	const [show, setShow] = useState(false);
 	return (
 		<>
-			<Button variant="primary" onClick={startImport}>
+			<Button variant="light" size="sm" onClick={startImport}>
 				导入
 			</Button>
 			<ImportBookModal
@@ -87,6 +82,8 @@ function ImportBook(props) {
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
+import { Container, ListGroup, Card } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 function ImportBookModal(props) {
 	const form = useRef();
 	const onEnterd = () => {
@@ -102,9 +99,9 @@ function ImportBookModal(props) {
 	return (
 		<Modal
 			show={props.show}
+			centered
 			onEntered={onEnterd}
 			onHide={props.onHide}
-			size="sm"
 		>
 			<Modal.Header closeButton>
 				<Modal.Title>导入书籍</Modal.Title>

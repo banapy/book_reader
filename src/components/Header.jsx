@@ -30,8 +30,8 @@ export default function MyHeader(props) {
 						>
 							{auth.isLogin ? (
 								<>
-									<Nav.Link href="#link">账号</Nav.Link>
-									<Nav.Link href="#link">设置</Nav.Link>
+									<Nav.Link href="/account">账号</Nav.Link>
+									<Nav.Link href="/setting">设置</Nav.Link>
 								</>
 							) : (
 								<Nav.Link onClick={(e) => navigate("/login")}>登录</Nav.Link>

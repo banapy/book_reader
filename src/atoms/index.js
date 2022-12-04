@@ -29,21 +29,3 @@ export const authAtom = atom({
         },
     ]
 });
-// export const userInfoAtom = selector({
-//     key: "userInfo",
-//     default: {
-//         bookRoomName: "聊斋",
-//     },
-//     get: async ({ get }) => {
-//         let a = get(authAtom)
-//         console.log(a)
-//         if (a.uid == "") return new DefaultValue()
-//         return axios.get("/auth/bookRoom/userInfo/" + a.uid).then(res => {
-//             if (res.data.code == 0) {
-//                 return res.data.data
-//             } else {
-//                 return new DefaultValue()
-//             }
-//         })
-//     },
-// })
