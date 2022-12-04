@@ -11,7 +11,9 @@ export default function Index(props) {
 			manager: "continuous",
 			flow: "scrolled",
 		});
-		props.onRender && props.onRender({ book, rendition });
+		let op = { book, rendition }
+		console.log(op)
+		props.onRender && props.onRender(op);
 		rendition.display();
 
 		book.ready.then(() => {
@@ -40,7 +42,7 @@ export default function Index(props) {
 	}, []);
 	return (
 		<div
-			style={{ height: "100vh", width: "60%", margin: "auto" }}
+			style={{ height: "100vh", width: "80%", margin: "auto" }}
 			ref={ref}
 			id="book-viewer"
 		></div>
