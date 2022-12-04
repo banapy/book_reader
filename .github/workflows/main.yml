@@ -4,22 +4,6 @@ on:
   push:
     branches: [ "master" ]
 jobs:
-  deploy-web:
-    needs: [git-clone,clean-web-server]
-    runs-on: ubuntu-latest
-    steps:
-      - name: 部署前端
-        uses: garygrossgarten/github-action-ssh@release
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.HUAWEI_USERNAME }}
-          password: ${{ secrets.HUAWEI_PASSWORD }}
-          port: ${{ secrets.SSH_PORT }}
-          command: |
-            cd /home/solution-box/web/web-next/
-            pnpm install
-            pnpm run build
-            sudo nohup pnpm run start > /home/solution-box/web.log 2>&1 &
   build-go:
     runs-on: ubuntu-latest
     steps:
