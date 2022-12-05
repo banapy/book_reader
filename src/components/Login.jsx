@@ -18,7 +18,7 @@ export default function Index(props) {
 					isLogin: true,
 				});
 				axios
-					.get("/auth/bookRoom/userInfo/" + res.data.data.uid)
+					.get("/api/bookRoom/userInfo/" + res.data.data.uid)
 					.then((res) => {
 						if (res.data.code == 0) {
 							set_auth({

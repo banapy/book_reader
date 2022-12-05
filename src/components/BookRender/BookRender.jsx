@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import Style from "./index.module.scss";
+import Style from "./BookRender.module.scss";
 import { loadScript } from "@/utils/index";
 export default function Index(props) {
 	const ref = useRef();
@@ -24,15 +24,12 @@ export default function Index(props) {
 						? rendition.next()
 						: rendition.prev();
 				}
-
-				// Right Key
 				if ((e.keyCode || e.which) == 39) {
 					book.package.metadata.direction === "rtl"
 						? rendition.prev()
 						: rendition.next();
 				}
 			};
-
 			rendition.on("keyup", keyListener);
 			document.addEventListener("keyup", keyListener, false);
 		});
@@ -42,7 +39,7 @@ export default function Index(props) {
 	}, []);
 	return (
 		<div
-			style={{ height: "100vh", width: "80%", margin: "auto" }}
+			style={{ height: "100vh", width: "100%", margin: "auto" ,zIndex:0}}
 			ref={ref}
 			id="book-viewer"
 		></div>

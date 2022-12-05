@@ -1,9 +1,10 @@
-import BookRender from "@/components/BookRender/index";
+import BookRender from "@/components/BookRender/BookRender";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { Button, Container, ListGroup, Offcanvas } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { getDefer } from "@/utils";
+import BookViewerMenu from "@/components/BookViewerMenu/BookViewerMenu";
 export default function Index(props) {
 	let params = useParams();
 	const [url, set_url] = useState(
@@ -12,7 +13,7 @@ export default function Index(props) {
 	let bookId = params.bookId;
 	let [renderDefer] = useState(getDefer());
 	useEffect(() => {
-		axios.get("/auth/bookRoom/book/" + bookId).then((res) => {
+		axios.get("/api/bookRoom/book/" + bookId).then((res) => {
 			if (res.data.code === 0) {
 				console.log(res.data.data);
 			}
@@ -22,60 +23,9 @@ export default function Index(props) {
 		renderDefer.resolve(_renderRes);
 	};
 	return (
-		<Container>
-			<Chapters renderDefer={renderDefer}></Chapters>
+		<Container className="position-relative">
+			<BookViewerMenu renderDefer={renderDefer}></BookViewerMenu>
 			<BookRender onRender={onRender} url={url}></BookRender>
 		</Container>
-	);
-}
-function Chapters(props) {
-	const { renderDefer } = props;
-	let [chapters, set_chapters] = useState([]);
-	const [title, set_title] = useState("");
-	const [show, setShow] = useState(false);
-	const handleClose = () => setShow(false);
-	const handleShow = () => setShow(true);
-	const goChapter = (chapter) => {
-		renderDefer.promise.then(({ rendition }) => {
-			rendition.display(chapter.href);
-		});
-	};
-	useEffect(() => {
-		renderDefer.promise.then((renderRes) => {
-			renderRes.book.loaded.navigation.then(function (res) {
-				const toc = res.toc;
-				set_chapters(toc);
-			});
-			renderRes.book.loaded.metadata.then(function (metadata) {
-				set_title(metadata.title);
-			});
-		});
-	}, []);
-	return (
-		<>
-			<Button variant="light" onClick={handleShow}>
-				目录
-			</Button>
-			<Offcanvas show={show} onHide={handleClose} scroll backdrop>
-				<Offcanvas.Header>
-					<Offcanvas.Title>{title ? title : "目录"}</Offcanvas.Title>
-				</Offcanvas.Header>
-				<Offcanvas.Body>
-					<ListGroup>
-						{chapters.map((chapter) => {
-							return (
-								<ListGroup.Item
-									key={chapter.id}
-									onClick={(e) => goChapter(chapter)}
-									style={{ cursor: "pointer" }}
-								>
-									{chapter.label}
-								</ListGroup.Item>
-							);
-						})}
-					</ListGroup>
-				</Offcanvas.Body>
-			</Offcanvas>
-		</>
 	);
 }
