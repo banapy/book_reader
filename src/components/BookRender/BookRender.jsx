@@ -8,8 +8,8 @@ export default function Index(props) {
 		let rendition = book.renderTo(ref.current, {
 			width: "100%",
 			height: "100%",
-			manager: "continuous",
-			flow: "scrolled",
+			// manager: "continuous",
+			// flow: "scrolled",
 		});
 		let op = { book, rendition }
 		console.log(op)

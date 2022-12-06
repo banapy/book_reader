@@ -58,12 +58,35 @@ export default function Index(props) {
 
 	return <>{mainPage}</>;
 }
+import { axios } from "@/api";
+import { authAtom } from "@/atoms";
 function ImportBook(props) {
 	const startImport = () => {
 		setShow(true);
 	};
-	const onSubmit = (formData) => {
+	const [auth] = useRecoilState(authAtom);
+	const onSubmit = async (formData) => {
 		console.log(formData);
+		let file = formData.get("file");
+		let fileId;
+		if (file) {
+			const res = await axios.post("/api/static/files", formData);
+			if (res.data.code === 0) {
+				fileId = res.data.data;
+			}
+		}
+		const res = await axios.post("/api/bookRoom/userInfo", {
+			uid: auth.uid,
+			bookProxy: {
+				fileId: fileId,
+				fileType: "文件",
+				fileUrl: formData.get("fileUrl"),
+				fileName: formData.get("fileName"),
+			},
+		});
+		if (res.data.data.code === 0) {
+			console.log("上传成功");
+		}
 	};
 	const [show, setShow] = useState(false);
 	return (
@@ -84,6 +107,7 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { Container, ListGroup, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 function ImportBookModal(props) {
 	const form = useRef();
 	const onEnterd = () => {
@@ -107,30 +131,47 @@ function ImportBookModal(props) {
 				<Modal.Title>导入书籍</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
-				<Form ref={form}>
-					<Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+				<iframe
+					id="iframeDisplay"
+					name="iframe_display"
+					style={{ display: "none" }}
+				></iframe>
+				<Form ref={form} target="iframeDisplay">
+					<Form.Group className="mb-3" controlId="form.fileName">
 						<Form.Label>书名</Form.Label>
-						<Form.Control type="text" placeholder="三国演义" autoFocus />
+						<Form.Control
+							type="text"
+							placeholder="三国演义"
+							name="fileName"
+							autoFocus
+							required
+						/>
 					</Form.Group>
 					<Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
 						<Form.Label>类型</Form.Label>
-						<Form.Select aria-label="类型" onChange={onTypeChange}>
+						<Form.Select
+							aria-label="类型"
+							name="fileType"
+							required
+							onChange={onTypeChange}
+						>
 							<option value="文件">文件</option>
 							<option value="链接">链接</option>
 						</Form.Select>
 					</Form.Group>
 					{importType === "文件" ? (
-						<Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+						<Form.Group className="mb-3" controlId="form.fileType">
 							<Form.Label>文件</Form.Label>
-							<Form.Control type="file" />
+							<Form.Control type="file" name="file" required />
 						</Form.Group>
 					) : (
-						<Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+						<Form.Group className="mb-3" controlId="form.fileUrl">
 							<Form.Label>URL</Form.Label>
 							<Form.Control
+								name="fileUrl"
 								type="text"
 								placeholder="https://xxx.com/xxx.epub"
-								autoFocus
+								required
 							/>
 						</Form.Group>
 					)}
