@@ -3,13 +3,13 @@
   <h1>书斋</h1>
 </div>
 
-## ⚡ Introduction
+## ⚡ 介绍
 
 书斋是免费开源的epub格式的电子书阅读器，可通过在线，文件，微信公众号，邮箱等多种方式导入书籍。
 
 - Web: [书斋-web](https://xingxia)
 
-## Feature
+## 特性
 - **epub**：epubjs渲染
 - **react**: react前端框架开发
 
