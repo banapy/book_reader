@@ -7,14 +7,10 @@ import {
 import Home from './views/home'
 import Login from './views/login'
 import BookViewer from './views/bookViewer'
+import UploadBook from './views/uploadBook'
 import Error from './views/error'
 import { RecoilRoot } from "recoil";
 const router = createHashRouter([
-  {
-    path: "/",
-    element: <Home></Home>,
-    errorElement: <Error />,
-  },
   {
     path: "/login",
     element: <Login></Login>,
@@ -23,6 +19,16 @@ const router = createHashRouter([
   {
     path: "/bookViewer/:bookId",
     element: <BookViewer></BookViewer>,
+    errorElement: <Error />,
+  },
+  {
+    path: "/uploadBook",
+    element: <UploadBook></UploadBook>,
+    errorElement: <Error />,
+  },
+  {
+    path: "/",
+    element: <Home></Home>,
     errorElement: <Error />,
   },
 ]);

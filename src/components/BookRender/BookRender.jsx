@@ -8,11 +8,15 @@ export default function Index(props) {
 		let rendition = book.renderTo(ref.current, {
 			width: "100%",
 			height: "100%",
-			// manager: "continuous",
-			// flow: "scrolled",
+			...(props.type === "上下滚动"
+				? {
+						manager: "continuous",
+						flow: "scrolled",
+				  }
+				: {}),
 		});
-		let op = { book, rendition }
-		console.log(op)
+		let op = { book, rendition };
+		console.log(op);
 		props.onRender && props.onRender(op);
 		rendition.display();
 
@@ -39,7 +43,7 @@ export default function Index(props) {
 	}, []);
 	return (
 		<div
-			style={{ height: "100vh", width: "100%", margin: "auto" ,zIndex:0}}
+			style={{ height: "100%", width: "100%", margin: "auto", zIndex: 0 }}
 			ref={ref}
 			id="book-viewer"
 		></div>

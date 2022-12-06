@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { Container } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { getDefer } from "@/utils";
-import BookViewerMenu from "@/components/BookViewerMenu/BookViewerMenu";
+import MobileBookViewerMenu from "@/components/MobileBookViewerMenu/MobileBookViewerMenu";
+import WebBookViewerMenu from "@/components/WebBookViewerMenu/WebBookViewerMenu";
 export default function Index(props) {
 	let params = useParams();
 	const [url, set_url] = useState(
@@ -24,8 +25,23 @@ export default function Index(props) {
 	};
 	return (
 		<Container className="position-relative">
-			<BookViewerMenu renderDefer={renderDefer}></BookViewerMenu>
-			<BookRender onRender={onRender} url={url}></BookRender>
+			{isMobile ? (
+				<MobileBookViewerMenu renderDefer={renderDefer}>
+					<BookRender
+						onRender={onRender}
+						url={url}
+						type={"左右翻页"}
+					></BookRender>
+				</MobileBookViewerMenu>
+			) : (
+				<WebBookViewerMenu renderDefer={renderDefer}>
+					<BookRender
+						onRender={onRender}
+						url={url}
+						type={"上下滚动"}
+					></BookRender>
+				</WebBookViewerMenu>
+			)}
 		</Container>
 	);
 }

@@ -1,9 +1,11 @@
-import BookChapters from "./BookChapters";
+import BookChapters from "@/components/BookChapters";
 import { Tab, Nav, Row, Col, Navbar, Container } from "react-bootstrap";
 import Nothing from "@/components/Nothing";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePersistFn } from "@/utils/useFunc";
+import ReadingSetting from "@/components/ReadingSetting";
+
 function getClickPosition(e) {
 	let position = "";
 	let allWidth = document.body.clientWidth;
@@ -55,6 +57,7 @@ export default function Index(props) {
 	return (
 		<>
 			<TopMenu renderDefer={props.renderDefer}></TopMenu>
+			{props.children}
 			<BottomMenu renderDefer={props.renderDefer}></BottomMenu>
 		</>
 	);
@@ -81,7 +84,6 @@ function TopMenu(props) {
 	);
 }
 
-import ReadingSetting from "./ReadingSetting";
 
 function BottomMenu(props) {
 	const [key, setKey] = useState("");

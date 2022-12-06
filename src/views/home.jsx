@@ -1,8 +1,7 @@
 import { Suspense, useEffect, useRef, useState } from "react";
 import MyHeader from "@/components/Header";
+import BookCard from "@/components/BookCard";
 export default function Index(props) {
-	const [curState, setCurState] = useState("书架");
-	const navigate = useNavigate();
 	const bookProxyList = [
 		{
 			id: 0,
@@ -41,30 +40,24 @@ export default function Index(props) {
 			},
 		},
 	];
-	const onClickBook = (bookProxy) => {
-		navigate("/bookViewer/" + bookProxy.id);
-	};
 	let mainPage = (
 		<Container>
 			<MyHeader></MyHeader>
-			<div className="my-2">
-				<ImportBook></ImportBook>
+			<div className="mt-3">
+				
 			</div>
-			<div>
-				<div className="d-flex flex-wrap" style={{ gap: "10px" }}>
+			<div className="mt-3">
+				<BookCard.Container>
 					{bookProxyList.map((x) => {
 						return (
-							<div
-								className="d-flex flex-column align-items-center"
-								style={{ width: "fit-content", cursor: "pointer" }}
-								onClick={(e) => onClickBook(x)}
-							>
-								<img src={x.info.cover} alt="" style={{ width: "120px" }} />
-								<span>{x.info.bookName}</span>
-							</div>
+							<BookCard
+								cover={x.info.cover}
+								bookName={x.info.bookName}
+								id={x.id}
+							></BookCard>
 						);
 					})}
-				</div>
+				</BookCard.Container>
 			</div>
 		</Container>
 	);
