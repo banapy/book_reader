@@ -2,7 +2,7 @@ name: 部署book_reader项目
 on:
   workflow_dispatch:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
 jobs:
   build-go:
     runs-on: ubuntu-latest
