@@ -49,8 +49,8 @@ pnpm start
 
 QQ群：654036031 (left) && 微信（右侧），可邀请你加入微信群聊 (right)
 
-![qq.png](./src/assets/docs/qq.png)
-![wechat.png](./src/assets/docs/wechat.png)
+![qq.png](./src/assets/docs/qq.jpg)
+![wechat.png](./src/assets/docs/wechat.jpg)
 
 ## 📄 许可证
 
