@@ -10,7 +10,7 @@ export default function Index(props) {
 			info: {
 				url: "https://react-reader.metabits.no/files/alice.epub",
 				cover: "http://img3m9.ddimg.cn/26/10/27669239-1_w_1.jpg",
-				bookName: "alice",
+				bookName: "Alice",
 			},
 		},
 		{
@@ -19,7 +19,25 @@ export default function Index(props) {
 			info: {
 				url: "https://s3.amazonaws.com/moby-dick/moby-dick.epub",
 				cover: "http://img3m5.ddimg.cn/74/8/1137309005-1_w_1.jpg",
-				bookName: "moby-dick",
+				bookName: "Moby-Dick",
+			},
+		},
+		{
+			id: 2,
+			type: "链接",
+			info: {
+				url: "https://s3.amazonaws.com/moby-dick/moby-dick.epub",
+				cover: "http://img3m5.ddimg.cn/74/8/1137309005-1_w_1.jpg",
+				bookName: "Moby-Dick",
+			},
+		},
+		{
+			id: 3,
+			type: "链接",
+			info: {
+				url: "https://s3.amazonaws.com/moby-dick/moby-dick.epub",
+				cover: "http://img3m5.ddimg.cn/74/8/1137309005-1_w_1.jpg",
+				bookName: "Moby-Dick",
 			},
 		},
 	];
@@ -33,25 +51,20 @@ export default function Index(props) {
 				<ImportBook></ImportBook>
 			</div>
 			<div>
-				<ListGroup variant="flush">
+				<div className="d-flex flex-wrap" style={{ gap: "10px" }}>
 					{bookProxyList.map((x) => {
 						return (
-							<ListGroup.Item key={x.id} onClick={(e) => onClickBook(x)}>
-								<div className="d-flex align-items-center">
-									<img
-										src={x.info.cover}
-										alt=""
-										className=""
-										style={{ width: "20vw" }}
-									/>
-									<div className="h-100">
-										<h6>{x.info.bookName}</h6>
-									</div>
-								</div>
-							</ListGroup.Item>
+							<div
+								className="d-flex flex-column align-items-center"
+								style={{ width: "fit-content", cursor: "pointer" }}
+								onClick={(e) => onClickBook(x)}
+							>
+								<img src={x.info.cover} alt="" style={{ width: "120px" }} />
+								<span>{x.info.bookName}</span>
+							</div>
 						);
 					})}
-				</ListGroup>
+				</div>
 			</div>
 		</Container>
 	);
@@ -91,7 +104,7 @@ function ImportBook(props) {
 	const [show, setShow] = useState(false);
 	return (
 		<>
-			<Button variant="light" size="sm" onClick={startImport}>
+			<Button variant="light" onClick={startImport}>
 				导入
 			</Button>
 			<ImportBookModal
