@@ -8,8 +8,12 @@ import {
 	Row,
 } from "react-bootstrap";
 import { useEffect, useRef, useState } from "react";
-
+import { axios } from "@/api";
+import { authAtom } from "@/atoms";
+import { useRecoilState } from "recoil";
 export default function Index(props) {
+	const [auth] = useRecoilState(authAtom);
+
 	const [messageList, set_messageList] = useState([
 		{
 			avatar: "https://imyshare.com/media/user/head12.jpg",
@@ -31,10 +35,40 @@ export default function Index(props) {
 		},
 	]);
 	const form = useRef();
-	useEffect(() => {}, []);
+	const initMessageList = () => {
+		axios
+			.get("/api/replies/app/bookRoom", {
+				pageSize: 10,
+				pageNo: 1,
+			})
+			.then((res) => {
+				if (res.data.code === 0) {
+					if (res.data.data) {
+						set_messageList(res.data.data);
+					}
+				}
+			});
+	};
+	useEffect(() => {
+		initMessageList();
+	}, []);
 	const submit = () => {
 		let formData = new FormData(form.current);
 		console.log(formData);
+		const content = formData.get("message");
+		if (!content) return;
+		axios
+			.post("/api/replies/app", {
+				appId: "bookRoom",
+				content: content,
+				userId: auth.uid,
+				type: "留言",
+			})
+			.then((res) => {
+				if (res.data.code === 0) {
+					initMessageList();
+				}
+			});
 	};
 	return (
 		<>
@@ -81,8 +115,10 @@ function MessageItem(props) {
 			<div className="d-flex flex-column w-100">
 				<div className="d-flex justify-content-between w-100">
 					<div className="d-flex align-items-center">
-						<span className="d-inline-block me-3">{props.data.name}</span>
-						<span className="d-inline-block">{props.data.time}</span>
+						<span className="d-inline-block me-3">{props.data.userName}</span>
+						<span className="d-inline-block">
+							{dayjs(props.data.CreatedAt).format("YYYY-MM-DD hh-mm-ss")}
+						</span>
 					</div>
 					<Button variant="link">回复</Button>
 				</div>
