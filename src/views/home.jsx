@@ -1,58 +1,73 @@
 import { Suspense, useEffect, useRef, useState } from "react";
 import MyHeader from "@/components/Header";
 import BookCard from "@/components/BookCard";
+import { authAtom } from "@/atoms";
+import { axios } from "@/api";
 export default function Index(props) {
-	const bookProxyList = [
-		{
-			id: 0,
-			type: "链接",
-			info: {
-				url: "https://react-reader.metabits.no/files/alice.epub",
-				cover: "http://img3m9.ddimg.cn/26/10/27669239-1_w_1.jpg",
-				bookName: "Alice",
-			},
-		},
-		{
-			id: 1,
-			type: "链接",
-			info: {
-				url: "https://s3.amazonaws.com/moby-dick/moby-dick.epub",
-				cover: "http://img3m5.ddimg.cn/74/8/1137309005-1_w_1.jpg",
-				bookName: "Moby-Dick",
-			},
-		},
-		{
-			id: 2,
-			type: "链接",
-			info: {
-				url: "https://s3.amazonaws.com/moby-dick/moby-dick.epub",
-				cover: "http://img3m5.ddimg.cn/74/8/1137309005-1_w_1.jpg",
-				bookName: "Moby-Dick",
-			},
-		},
-		{
-			id: 3,
-			type: "链接",
-			info: {
-				url: "https://s3.amazonaws.com/moby-dick/moby-dick.epub",
-				cover: "http://img3m5.ddimg.cn/74/8/1137309005-1_w_1.jpg",
-				bookName: "Moby-Dick",
-			},
-		},
-	];
+	// const bookProxyList = [
+	// 	{
+	// 		id: 0,
+	// 		type: "链接",
+	// 		info: {
+	// 			url: "https://react-reader.metabits.no/files/alice.epub",
+	// 			cover: "http://img3m9.ddimg.cn/26/10/27669239-1_w_1.jpg",
+	// 			bookName: "Alice",
+	// 		},
+	// 	},
+	// 	{
+	// 		id: 1,
+	// 		type: "链接",
+	// 		info: {
+	// 			url: "https://s3.amazonaws.com/moby-dick/moby-dick.epub",
+	// 			cover: "http://img3m5.ddimg.cn/74/8/1137309005-1_w_1.jpg",
+	// 			bookName: "Moby-Dick",
+	// 		},
+	// 	},
+	// 	{
+	// 		id: 2,
+	// 		type: "链接",
+	// 		info: {
+	// 			url: "https://s3.amazonaws.com/moby-dick/moby-dick.epub",
+	// 			cover: "http://img3m5.ddimg.cn/74/8/1137309005-1_w_1.jpg",
+	// 			bookName: "Moby-Dick",
+	// 		},
+	// 	},
+	// 	{
+	// 		id: 3,
+	// 		type: "链接",
+	// 		info: {
+	// 			url: "https://s3.amazonaws.com/moby-dick/moby-dick.epub",
+	// 			cover: "http://img3m5.ddimg.cn/74/8/1137309005-1_w_1.jpg",
+	// 			bookName: "Moby-Dick",
+	// 		},
+	// 	},
+	// ];
+	const [bookList, set_bookList] = useState([]);
+	const [auth] = useRecoilState(authAtom);
+	useEffect(() => {
+		axios
+			.get("/bookRoom/userInfo/books", {
+				params: {
+					uid: auth.uid,
+				},
+			})
+			.then((res) => {
+				if (res.data.code === 0) {
+					set_bookList(res.data.data);
+				}
+			});
+	}, []);
 	let mainPage = (
 		<Container>
 			<MyHeader></MyHeader>
-			<div className="mt-3">
-				
-			</div>
+			<div className="mt-3"></div>
 			<div className="mt-3">
 				<BookCard.Container>
-					{bookProxyList.map((x) => {
+					{bookList.map((x) => {
 						return (
 							<BookCard
-								cover={x.info.cover}
-								bookName={x.info.bookName}
+								cover={x.cover}
+								bookName={x.bookName}
 								id={x.id}
 							></BookCard>
 						);
@@ -64,8 +79,6 @@ export default function Index(props) {
 
 	return <>{mainPage}</>;
 }
-import { axios } from "@/api";
-import { authAtom } from "@/atoms";
 function ImportBook(props) {
 	const startImport = () => {
 		setShow(true);

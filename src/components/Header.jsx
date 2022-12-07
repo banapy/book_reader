@@ -21,7 +21,11 @@ export default function MyHeader(props) {
 						className="me-auto my-2 my-lg-0"
 						style={{ maxHeight: "100px" }}
 						navbarScroll
-					></Nav>
+					>
+						<Nav.Link href="/#/uploadBook">导入</Nav.Link>
+						<Nav.Link href="/#/about">关于</Nav.Link>
+						<Nav.Link href="/#/message">留言</Nav.Link>
+					</Nav>
 					<Form className="d-flex">
 						<Nav
 							className="me-auto my-2 my-lg-0"
@@ -30,7 +34,6 @@ export default function MyHeader(props) {
 						>
 							{auth.isLogin ? (
 								<>
-									<Nav.Link href="/#/uploadBook">导入</Nav.Link>
 									<Nav.Link href="/#/account">账号</Nav.Link>
 									<Nav.Link href="/#/setting">设置</Nav.Link>
 								</>

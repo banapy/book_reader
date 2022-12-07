@@ -9,7 +9,7 @@ axios.interceptors.request.use(
     if (userInfo) {
       userInfo = JSON.parse(userInfo)
       config.headers['Authorization'] = userInfo.token
-      config.headers['Content-Type'] = 'application/json'
+      // config.headers['Content-Type'] = 'application/json'
     }
     return config
   },

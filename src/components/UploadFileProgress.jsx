@@ -4,6 +4,7 @@ import { Container } from "react-bootstrap";
 import { usePersistFn } from "@/utils/useFunc";
 import { axios } from "@/api";
 import { authAtom } from "@/atoms";
+import { useRecoilState } from "recoil";
 
 export default function Index(props) {
 	let [percentage, set_percentage] = useState(50);
@@ -11,7 +12,11 @@ export default function Index(props) {
 	useEffect(async () => {
 		let formData = new FormData();
 		formData.append("file", props.file);
-		const res = await axios.post("/api/static/files", formData);
+		const res = await axios.post("/api/static/files", formData, {
+			headers: {
+				"Content-Type": "multipart/form-data",
+			},
+		});
 		if (res.data.code !== 0) {
 			return;
 		}
