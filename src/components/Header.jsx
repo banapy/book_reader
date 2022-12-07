@@ -8,7 +8,6 @@ import Form from "react-bootstrap/Form";
 
 export default function MyHeader(props) {
 	const auth = useRecoilValue(authAtom);
-	const navigate = useNavigate();
 	return (
 		<Navbar bg="light" expand="lg" className="mb-3">
 			<Container fluid>
@@ -38,7 +37,10 @@ export default function MyHeader(props) {
 									<Nav.Link href="/#/setting">设置</Nav.Link>
 								</>
 							) : (
-								<Nav.Link onClick={(e) => navigate("/login")}>登录</Nav.Link>
+								<>
+									<Nav.Link href="/#/login">登录</Nav.Link>
+									<Nav.Link href="/#/register">注册</Nav.Link>
+								</>
 							)}
 						</Nav>
 					</Form>

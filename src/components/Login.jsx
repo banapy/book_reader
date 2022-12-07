@@ -4,12 +4,14 @@ import { authAtom } from "@/atoms";
 import { useRecoilState } from "recoil";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import { useNavigate } from "react-router-dom";
 export default function Index(props) {
 	const [auth, set_auth] = useRecoilState(authAtom);
+	const navigate = useNavigate();
 	const [remeberMe, set_remeberMe] = useState("off");
 	const onSubmit = (values) => {
 		let params = new FormData();
-		params.append("mail", formData.mail);
+		params.append("email", formData.email);
 		params.append("password", formData.password);
 		axios.post("/login", params).then((res) => {
 			if (res.data.code === 0) {
@@ -17,23 +19,21 @@ export default function Index(props) {
 					...res.data.data,
 					isLogin: true,
 				});
-				axios
-					.get("/api/bookRoom/userInfo/" + res.data.data.uid)
-					.then((res) => {
-						if (res.data.code == 0) {
-							set_auth({
-								...auth,
-								userInfo: res.data.data,
-							});
-						}
-					});
+				axios.get("/api/bookRoom/userInfo/" + res.data.data.uid).then((res) => {
+					if (res.data.code == 0) {
+						set_auth({
+							...auth,
+							userInfo: res.data.data,
+						});
+					}
+				});
 				props.onLogin && props.onLogin();
 			}
 		});
 	};
 	const form = useRef();
 	const [formData, set_formData] = useState({
-		mail: "",
+		email: "",
 		password: "",
 	});
 	return (
@@ -44,7 +44,7 @@ export default function Index(props) {
 					type="email"
 					required
 					placeholder="name@example.com"
-					onChange={(e) => set_formData({ ...formData, mail: e.target.value })}
+					onChange={(e) => set_formData({ ...formData, email: e.target.value })}
 				/>
 				<label htmlFor="floatingInputEmail">邮箱</label>
 			</Form.Floating>
@@ -79,7 +79,7 @@ export default function Index(props) {
 					登录
 				</Button>
 				或者
-				<Button variant="link" onClick={props.onGoRegister}>
+				<Button variant="link" onClick={(e) => navigate("/register")}>
 					去注册!
 				</Button>
 			</Form.Group>

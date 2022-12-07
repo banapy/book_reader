@@ -9,7 +9,7 @@ export const authAtom = atom({
         token: "",
         name: "",
         uid: "",
-        mail: "",
+        email: "",
         isLogin: false,
         userInfo: null
     },

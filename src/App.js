@@ -13,6 +13,7 @@ import About from './views/about'
 import Message from './views/message'
 import Account from './views/account'
 import Setting from './views/setting'
+import Register from './views/register'
 import { RecoilRoot } from "recoil";
 const router = createHashRouter([
   {
@@ -33,6 +34,11 @@ const router = createHashRouter([
   {
     path: "/about",
     element: <About></About>,
+    errorElement: <Error />,
+  },
+  {
+    path: "/register",
+    element: <Register></Register>,
     errorElement: <Error />,
   },
   {
