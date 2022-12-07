@@ -9,7 +9,7 @@ import Form from "react-bootstrap/Form";
 export default function MyHeader(props) {
 	const auth = useRecoilValue(authAtom);
 	return (
-		<Navbar bg="light" expand="lg" className="mb-3">
+		<Navbar bg="light" expand="lg" className="mb-3 fixed-top">
 			<Container fluid>
 				<Navbar.Brand href="/#/">
 					{auth.userInfo ? auth.userInfo.bookRoomName : "书斋"}

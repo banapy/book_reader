@@ -1,11 +1,11 @@
 import Nothing from "@/components/Nothing";
-import MyHeader from "@/components/Header";
+import Layout from "@/components/Layout";
+
 import { Container } from "react-bootstrap";
 export default function Index() {
 	return (
-		<Container>
-			<MyHeader></MyHeader>
+		<Layout>
 			<Nothing></Nothing>
-		</Container>
+		</Layout>
 	);
 }

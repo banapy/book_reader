@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { Container } from "react-bootstrap";
 import DragUpload from "@/components/DragUpload";
 import UploadFileProgress from "@/components/UploadFileProgress";
+import Layout from "@/components/Layout";
 
 export default function Index() {
 	const [fileList, set_fileList] = useState([]);
@@ -10,14 +11,13 @@ export default function Index() {
 		set_fileList(files);
 	};
 	return (
-		<Container>
-			<MyHeader></MyHeader>
+		<Layout>
 			<DragUpload onChange={onChange}></DragUpload>
 			<div className="d-flex flex-column" style={{ rowGap: "10px" }}>
 				{fileList.map((file) => {
 					return <UploadFileProgress file={file}></UploadFileProgress>;
 				})}
 			</div>
-		</Container>
+		</Layout>
 	);
 }

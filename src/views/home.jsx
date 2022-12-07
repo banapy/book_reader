@@ -3,6 +3,8 @@ import MyHeader from "@/components/Header";
 import BookCard from "@/components/BookCard";
 import { authAtom } from "@/atoms";
 import { axios } from "@/api";
+import Layout from "@/components/Layout";
+
 export default function Index(props) {
 	// const bookProxyList = [
 	// 	{
@@ -58,9 +60,7 @@ export default function Index(props) {
 			});
 	}, []);
 	let mainPage = (
-		<Container>
-			<MyHeader></MyHeader>
-			<div className="mt-3"></div>
+		<Layout>
 			<div className="mt-3">
 				<BookCard.Container>
 					{bookList.map((x) => {
@@ -74,7 +74,7 @@ export default function Index(props) {
 					})}
 				</BookCard.Container>
 			</div>
-		</Container>
+		</Layout>
 	);
 
 	return <>{mainPage}</>;
