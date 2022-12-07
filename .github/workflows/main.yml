@@ -16,7 +16,7 @@ jobs:
           cache: yarn
 
       - name: 构建程序
-        run:  yarn && yarn build
+        run:  yarn config set strict-ssl false && yarn && yarn build
 
       - name: 向服务器传输可执行程序
         uses: appleboy/scp-action@master
