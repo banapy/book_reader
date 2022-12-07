@@ -1,4 +1,4 @@
-import { notification } from 'antd'
+// import { notification } from 'antd'
 import axios, { AxiosResponse } from 'axios'
 
 axios.defaults.baseURL = "http://localhost:7998"
@@ -28,13 +28,13 @@ axios.interceptors.response.use(
       // localStorage.clear()
     }
     if (res.status !== 200) {
-      notification.error({
+      console.error({
         message: "接口错误",
         description: ""
       })
     } else {
       if (res.data.code === -1) {
-        notification.error({
+        console.error({
           message: "接口错误",
           description: res.data.msg
         })
