@@ -10,7 +10,7 @@ export default function MyHeader(props) {
 	const auth = useRecoilValue(authAtom);
 	const navigate = useNavigate();
 	return (
-		<Navbar bg="light" expand="lg">
+		<Navbar bg="light" expand="lg" className="mb-3">
 			<Container fluid>
 				<Navbar.Brand href="/#/">
 					{auth.userInfo ? auth.userInfo.bookRoomName : "书斋"}

@@ -1,11 +1,12 @@
-import Nothing from "@/components/Nothing";
+import MessageBoard from "@/components/MessageBoard";
 import MyHeader from "@/components/Header";
 import { Container } from "react-bootstrap";
 export default function Index() {
 	return (
 		<Container>
 			<MyHeader></MyHeader>
-			<Nothing></Nothing>
+			{/* <Nothing></Nothing> */}
+			<MessageBoard></MessageBoard>
 		</Container>
 	);
 }
