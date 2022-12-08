@@ -1,7 +1,8 @@
 // import { notification } from 'antd'
 import axios, { AxiosResponse } from 'axios'
 // axios.defaults.baseURL = "http://localhost:7998"
-axios.defaults.baseURL = process.env.REACT_APP_BASE_URL
+export const baseURL = process.env.REACT_APP_BASE_URL
+axios.defaults.baseURL = baseURL
 axios.defaults.timeout = 2000 // 超时时间
 axios.interceptors.request.use(
   config => {

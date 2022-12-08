@@ -9,28 +9,31 @@ import { useRecoilState } from "recoil";
 export default function Index(props) {
 	let [percentage, set_percentage] = useState(50);
 	const [auth] = useRecoilState(authAtom);
-	useEffect(async () => {
-		let formData = new FormData();
-		formData.append("file", props.file);
-		const res = await axios.post("/api/static/files", formData, {
-			headers: {
-				"Content-Type": "multipart/form-data",
-			},
-		});
-		if (res.data.code !== 0) {
-			return;
-		}
-		let fileId = res.data.data;
-		const res2 = await axios.post("/api/bookRoom/userInfo", {
-			uid: auth.uid,
-			bookProxy: {
-				fileId: fileId,
-			},
-		});
-		if (res2.data.data.code !== 0) {
-			return;
-		}
-		set_percentage(100);
+	useEffect(() => {
+		const upDate = async () => {
+			let formData = new FormData();
+			formData.append("file", props.file);
+			const res = await axios.post("/api/static/files", formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			});
+			if (res.data.code !== 0) {
+				return;
+			}
+			let fileId = res.data.data;
+			const res2 = await axios.post("/api/bookRoom/userInfo", {
+				uid: auth.uid,
+				bookProxy: {
+					fileId: fileId,
+				},
+			});
+			if (res2.data.code !== 0) {
+				return;
+			}
+			set_percentage(100);
+		};
+		upDate()
 	}, []);
 	return (
 		<div

@@ -15,24 +15,24 @@ export default function Index(props) {
 	const [auth] = useRecoilState(authAtom);
 
 	const [messageList, set_messageList] = useState([
-		{
-			avatar: "https://imyshare.com/media/user/head12.jpg",
-			content: "sfsfsf",
-			time: "2022-11-10 10:11:11",
-			name: "nickName",
-		},
-		{
-			avatar: "https://imyshare.com/media/user/head12.jpg",
-			content: "sfsfsf",
-			time: "2022-11-10 10:11:11",
-			name: "nickName",
-		},
-		{
-			avatar: "https://imyshare.com/media/user/head12.jpg",
-			content: "sfsfsf",
-			time: "2022-11-10 10:11:11",
-			name: "nickName",
-		},
+		// {
+		// 	avatar: "https://imyshare.com/media/user/head12.jpg",
+		// 	content: "sfsfsf",
+		// 	time: "2022-11-10 10:11:11",
+		// 	name: "nickName",
+		// },
+		// {
+		// 	avatar: "https://imyshare.com/media/user/head12.jpg",
+		// 	content: "sfsfsf",
+		// 	time: "2022-11-10 10:11:11",
+		// 	name: "nickName",
+		// },
+		// {
+		// 	avatar: "https://imyshare.com/media/user/head12.jpg",
+		// 	content: "sfsfsf",
+		// 	time: "2022-11-10 10:11:11",
+		// 	name: "nickName",
+		// },
 	]);
 	const form = useRef();
 	const initMessageList = () => {

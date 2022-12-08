@@ -4,6 +4,7 @@ import BookCard from "@/components/BookCard";
 import { authAtom } from "@/atoms";
 import { axios } from "@/api";
 import Layout from "@/components/Layout";
+import * as Api from "@/api";
 
 export default function Index(props) {
 	// const bookProxyList = [
@@ -48,14 +49,19 @@ export default function Index(props) {
 	const [auth] = useRecoilState(authAtom);
 	useEffect(() => {
 		axios
-			.get("/bookRoom/userInfo/books", {
+			.get("/api/bookRoom/userInfo/books", {
 				params: {
 					uid: auth.uid,
 				},
 			})
 			.then((res) => {
 				if (res.data.code === 0) {
-					set_bookList(res.data.data);
+					let v = res.data.data.map((x) => {
+						x.coverage = Api.baseURL + "/api/server/imgs/" + x.coverage;
+						return x;
+					});
+					console.log(v);
+					set_bookList(v);
 				}
 			});
 	}, []);
@@ -66,9 +72,9 @@ export default function Index(props) {
 					{bookList.map((x) => {
 						return (
 							<BookCard
-								cover={x.cover}
-								bookName={x.bookName}
-								id={x.id}
+								cover={x.coverage}
+								bookName={x.title}
+								id={x.ID}
 							></BookCard>
 						);
 					})}

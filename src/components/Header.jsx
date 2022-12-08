@@ -24,6 +24,7 @@ export default function MyHeader(props) {
 						<Nav.Link href="/#/uploadBook">导入</Nav.Link>
 						<Nav.Link href="/#/about">关于</Nav.Link>
 						<Nav.Link href="/#/message">留言</Nav.Link>
+						<Nav.Link href="https://github.com/banapy/book_reader">github</Nav.Link>
 					</Nav>
 					<Form className="d-flex">
 						<Nav
