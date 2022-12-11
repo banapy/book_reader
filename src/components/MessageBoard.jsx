@@ -42,9 +42,9 @@ export default function Index(props) {
 				pageNo: 1,
 			})
 			.then((res) => {
-				if (res.data.code === 0) {
-					if (res.data.data) {
-						set_messageList(res.data.data);
+				if (res.code === 0) {
+					if (res.data) {
+						set_messageList(res.data);
 					}
 				}
 			});
@@ -65,7 +65,7 @@ export default function Index(props) {
 				type: "留言",
 			})
 			.then((res) => {
-				if (res.data.code === 0) {
+				if (res.code === 0) {
 					initMessageList();
 				}
 			});

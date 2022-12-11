@@ -24,7 +24,7 @@ console.log("sdfasf")
 axios.interceptors.response.use(
   res => {
     // 10101是未登录状态码
-    if (res.data.code === 401) { // 如果是未登录直接踢出去
+    if (res.code === 401) { // 如果是未登录直接踢出去
       window.location.href = "/#/view/login"
       // localStorage.clear()
     }
@@ -34,14 +34,14 @@ axios.interceptors.response.use(
         description: ""
       })
     } else {
-      if (res.data.code === -1) {
+      if (res.code === -1) {
         console.error({
           message: "接口错误",
           description: res.data.msg
         })
       }
     }
-    return res
+    return res.data
   },
   error => {
     console.log(error)

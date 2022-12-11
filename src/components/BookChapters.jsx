@@ -2,21 +2,21 @@ import { Button, Card, Container, ListGroup, Offcanvas } from "react-bootstrap";
 import { useEffect, useRef, useState } from "react";
 
 export default function Chapters(props) {
-	const { renderDefer } = props;
+	const { bookShowPromise } = props;
 	let [chapters, set_chapters] = useState([]);
 	const [title, set_title] = useState("");
 	const goChapter = (chapter) => {
-		renderDefer.promise.then(({ rendition }) => {
-			rendition.display(chapter.href);
+		bookShowPromise.then((bs) => {
+			bs.book.rendition.display(chapter.href);
 		});
 	};
 	useEffect(() => {
-		renderDefer.promise.then((renderRes) => {
-			renderRes.book.loaded.navigation.then(function (res) {
+		bookShowPromise.then((bs) => {
+			bs.book.loaded.navigation.then(function (res) {
 				const toc = res.toc;
 				set_chapters(toc);
 			});
-			renderRes.book.loaded.metadata.then(function (metadata) {
+			bs.book.loaded.metadata.then(function (metadata) {
 				set_title(metadata.title);
 			});
 		});

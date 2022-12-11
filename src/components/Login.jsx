@@ -14,19 +14,25 @@ export default function Index(props) {
 		params.append("email", formData.email);
 		params.append("password", formData.password);
 		axios.post("/login", params).then((res) => {
-			if (res.data.code === 0) {
+			if (res.code === 0) {
 				set_auth({
-					...res.data.data,
+					...res.data,
 					isLogin: true,
 				});
-				axios.get("/api/bookRoom/userInfo/" + res.data.data.uid).then((res) => {
-					if (res.data.code == 0) {
-						set_auth({
-							...auth,
-							userInfo: res.data.data,
-						});
-					}
-				});
+				axios
+					.get("/api/bookRoom/userInfo", {
+						params: {
+							uid: res.data.uid,
+						},
+					})
+					.then((res) => {
+						if (res.code == 0) {
+							set_auth({
+								...auth,
+								userInfo: res.data,
+							});
+						}
+					});
 				props.onLogin && props.onLogin();
 			}
 		});

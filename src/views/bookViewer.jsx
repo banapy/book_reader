@@ -4,45 +4,50 @@ import { useEffect, useRef, useState } from "react";
 import { Container } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { getDefer } from "@/utils";
+import HighLight from "@/components/HighLight";
+import Layout from "@/components/Layout";
 
 import MobileBookViewerMenu from "@/components/MobileBookViewerMenu/MobileBookViewerMenu";
 import WebBookViewerMenu from "@/components/WebBookViewerMenu/WebBookViewerMenu";
 export default function Index(props) {
 	let params = useParams();
-	const [url, set_url] = useState(
-		"https://react-reader.metabits.no/files/alice.epub"
-	);
+	// const [url, set_url] = useState(
+	// 	"https://react-reader.metabits.no/files/alice.epub"
+	// );
 	let bookId = params.bookId;
-	let [renderDefer] = useState(getDefer());
-	useEffect(() => {
-		axios.get("/api/bookRoom/book/" + bookId).then((res) => {
-			if (res.data.code === 0) {
-				console.log(res.data.data);
-			}
-		});
-	}, []);
-	const onRender = (_renderRes) => {
-		renderDefer.resolve(_renderRes);
+	let [bookShowDefer] = useState(getDefer());
+	// useEffect(() => {
+	// 	axios.get("/api/bookRoom/book/" + bookId).then((res) => {
+	// 		if (res.code === 0) {
+	// 			console.log(res.data);
+	// 		}
+	// 	});
+	// }, []);
+	const onRender = (bookShow) => {
+		bookShowDefer.resolve(bookShow);
 	};
 	return (
-		<Container className="position-relative">
+		<Layout>
 			{isMobile ? (
-				<MobileBookViewerMenu renderDefer={renderDefer}>
+				<MobileBookViewerMenu bookShowPromise={bookShowDefer.promise}>
 					<BookRender
 						onRender={onRender}
-						url={url}
+						// url={url}
+						bookId={bookId}
 						type={"左右翻页"}
 					></BookRender>
 				</MobileBookViewerMenu>
 			) : (
-				<WebBookViewerMenu renderDefer={renderDefer}>
+				<WebBookViewerMenu bookShowPromise={bookShowDefer.promise}>
 					<BookRender
 						onRender={onRender}
-						url={url}
+						// url={url}
+						bookId={bookId}
 						type={"上下滚动"}
 					></BookRender>
 				</WebBookViewerMenu>
 			)}
-		</Container>
+			<HighLight bookShowPromise={bookShowDefer.promise}></HighLight>
+		</Layout>
 	);
 }

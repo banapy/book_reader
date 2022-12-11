@@ -1,51 +1,23 @@
 import { useEffect, useRef, useState } from "react";
 import Style from "./BookRender.module.scss";
 import { loadScript } from "@/utils/index";
+import BookShow from "./BookShow";
 export default function Index(props) {
 	const ref = useRef();
 	useEffect(() => {
-		let book = ePub(props.url);
-		let rendition = book.renderTo(ref.current, {
-			width: "100%",
-			height: "100%",
-			...(props.type === "上下滚动"
-				? {
-						manager: "continuous",
-						flow: "scrolled",
-				  }
-				: {}),
-		});
-		let op = { book, rendition };
-		console.log(op);
-		props.onRender && props.onRender(op);
-		rendition.display();
-
-		book.ready.then(() => {
-			var keyListener = function (e) {
-				// Left Key
-				if ((e.keyCode || e.which) == 37) {
-					book.package.metadata.direction === "rtl"
-						? rendition.next()
-						: rendition.prev();
-				}
-				if ((e.keyCode || e.which) == 39) {
-					book.package.metadata.direction === "rtl"
-						? rendition.prev()
-						: rendition.next();
-				}
-			};
-			rendition.on("keyup", keyListener);
-			document.addEventListener("keyup", keyListener, false);
-		});
+		let bookShow = new BookShow(props.bookId, ref.current);
+		props.onRender && props.onRender(bookShow);
 		return () => {
-			book.destroy();
+			bookShow.destroy();
 		};
 	}, []);
 	return (
-		<div
-			style={{ height: "100%", width: "100%", margin: "auto", zIndex: 0 }}
-			ref={ref}
-			id="book-viewer"
-		></div>
+		<>
+			<div
+				style={{ height: "100%", width: "100%", margin: "auto", zIndex: 0 }}
+				ref={ref}
+				id="book-viewer"
+			></div>
+		</>
 	);
 }

@@ -9,14 +9,21 @@ import {
 	Container,
 	OverlayTrigger,
 	Popover,
+	Button,
 } from "react-bootstrap";
 import Nothing from "@/components/Nothing";
 import { useEffect, useState } from "react";
 
 export default function Index(props) {
+	const onClick = () => {
+		props.bookShowPromise.then((bookShow) => {
+			console.log(bookShow);
+			
+		});
+	};
 	return (
-		<Container >
-			<Navbar bg="light">
+		<div>
+			{/* <Navbar bg="light">
 				<Container>
 					<Navbar.Brand href="#">书斋</Navbar.Brand>
 					<Navbar.Collapse id="basic-navbar-nav">
@@ -27,12 +34,14 @@ export default function Index(props) {
 						</Nav>
 					</Navbar.Collapse>
 				</Container>
-			</Navbar>
+			</Navbar> */}
 			<div style={{ height: "90vh", width: "80%", margin: "auto" }}>
 				{props.children}
 			</div>
-			<RightMenu renderDefer={props.renderDefer}></RightMenu>
-		</Container>
+			<RightMenu bookShowPromise={props.bookShowPromise}>
+				<Button variant="primary" onClick={onClick}>测试按钮</Button>
+			</RightMenu>
+		</div>
 	);
 }
 function RightMenu(props) {
@@ -60,7 +69,7 @@ function RightMenu(props) {
 						overlay={
 							<Popover id="popover-basic">
 								<Popover.Body style={{ padding: "0px" }}>
-									<BookChapters renderDefer={props.renderDefer}></BookChapters>
+									<BookChapters bookShowPromise={props.bookShowPromise}></BookChapters>
 								</Popover.Body>
 							</Popover>
 						}
@@ -112,6 +121,9 @@ function RightMenu(props) {
 					>
 						<Nav.Link eventKey="阅读设置">阅读设置</Nav.Link>
 					</OverlayTrigger>
+				</Nav.Item>
+				<Nav.Item>
+					<Nav.Link eventKey="阅读设置">{props.children}</Nav.Link>
 				</Nav.Item>
 			</Nav>
 		</div>

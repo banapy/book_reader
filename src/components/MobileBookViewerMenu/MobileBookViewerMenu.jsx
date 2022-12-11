@@ -29,18 +29,19 @@ export default function Index(props) {
 			set_show(p === "center");
 		}
 		if (p === "left") {
-			props.renderDefer.promise.then(({ rendition }) => {
-				rendition.prev();
+			props.bookShowPromise.then((bookShow) => {
+				bookShow.rendition.prev();
 			});
 		} else if (p === "right") {
-			props.renderDefer.promise.then(({ rendition }) => {
-				rendition.next();
+			props.bookShowPromise.then((bookShow) => {
+				bookShow.rendition.next();
 			});
 		}
 	});
+	
 	useEffect(() => {
-		props.renderDefer.promise.then(({ book, rendition }) => {
-			rendition.on("rendered", () => {
+		props.bookShowPromise.then((bookShow) => {
+			bookShow.rendition.on("rendered", () => {
 				let iframeList =
 					rendition.manager.container.getElementsByTagName("iframe");
 				iframeList = Array.from(iframeList);
@@ -48,7 +49,7 @@ export default function Index(props) {
 					iframe.contentDocument.addEventListener("click", cb);
 				});
 			});
-			rendition.on("markClicked", (cfirange, data, content) => {
+			bookShow.rendition.on("markClicked", (cfirange, data, content) => {
 				console.log(cfirange, data, content);
 			});
 		});
@@ -56,9 +57,9 @@ export default function Index(props) {
 	if (!show) return null;
 	return (
 		<>
-			<TopMenu renderDefer={props.renderDefer}></TopMenu>
+			<TopMenu bookShowPromise={props.bookShowPromise}></TopMenu>
 			{props.children}
-			<BottomMenu renderDefer={props.renderDefer}></BottomMenu>
+			<BottomMenu bookShowPromise={props.bookShowPromise}></BottomMenu>
 		</>
 	);
 }
@@ -106,7 +107,7 @@ function BottomMenu(props) {
 				<Row>
 					<Tab.Content style={{ paddingLeft: "0", paddingRight: "0" }}>
 						<Tab.Pane eventKey="目录">
-							<BookChapters renderDefer={props.renderDefer}></BookChapters>
+							<BookChapters bookShowPromise={props.bookShowPromise}></BookChapters>
 						</Tab.Pane>
 						<Tab.Pane eventKey="笔记">
 							<Nothing />

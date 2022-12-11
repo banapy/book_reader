@@ -23,8 +23,8 @@ export function useUser() {
     useEffect(() => {
         if (token != "" && user.uid == "") {
             getUserInfo(uid).then(res => {
-                if (res.data.code == 0) {
-                    setUser(res.data.data)
+                if (res.code == 0) {
+                    setUser(res.data)
                 }
             })
         }

@@ -319,7 +319,7 @@ export function loadScript(src) {
     }))
 
     return promise
-} 
+}
 export function isMobile() {
     if (window.navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)) {
         return true; // 移动端
@@ -327,3 +327,10 @@ export function isMobile() {
         return false; // PC端
     }
 }
+
+// export * from './EventClass'
+// export * from './auth'
+// export * from './constant'
+// export * from './time'
+// export * from './useFunc'
+// export * from './useLibrary'

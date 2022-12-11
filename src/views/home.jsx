@@ -55,12 +55,14 @@ export default function Index(props) {
 				},
 			})
 			.then((res) => {
-				if (res.data.code === 0) {
-					let v = res.data.data.map((x) => {
-						x.coverage = Api.baseURL + "/api/server/imgs/" + x.coverage;
+				if (res.code === 0) {
+					let v = res.data.map((x) => {
+						x.coverage =
+							process.env.REACT_APP_SERVER_IMG +
+							x.coverage +
+							"?w=200&h=300";
 						return x;
 					});
-					console.log(v);
 					set_bookList(v);
 				}
 			});
@@ -74,7 +76,7 @@ export default function Index(props) {
 							<BookCard
 								cover={x.coverage}
 								bookName={x.title}
-								id={x.ID}
+								id={x.fileId}
 							></BookCard>
 						);
 					})}
@@ -96,8 +98,8 @@ function ImportBook(props) {
 		let fileId;
 		if (file) {
 			const res = await axios.post("/api/static/files", formData);
-			if (res.data.code === 0) {
-				fileId = res.data.data;
+			if (res.code === 0) {
+				fileId = res.data;
 			}
 		}
 		const res = await axios.post("/api/bookRoom/userInfo", {
@@ -109,7 +111,7 @@ function ImportBook(props) {
 				fileName: formData.get("fileName"),
 			},
 		});
-		if (res.data.data.code === 0) {
+		if (res.code === 0) {
 			console.log("上传成功");
 		}
 	};

@@ -18,10 +18,10 @@ export default function Index(props) {
 					"Content-Type": "multipart/form-data",
 				},
 			});
-			if (res.data.code !== 0) {
+			if (res.code !== 0) {
 				return;
 			}
-			let fileId = res.data.data;
+			let fileId = res.data;
 			const res2 = await axios.post("/api/bookRoom/userInfo", {
 				uid: auth.uid,
 				bookProxy: {

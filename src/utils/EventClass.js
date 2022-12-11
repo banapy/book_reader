@@ -1,5 +1,5 @@
 import mitt from 'mitt';
-export class EventClass {
+export default class EventClass {
     constructor() {
         this.mitter = mitt();
         this.offHandlerList = [];
