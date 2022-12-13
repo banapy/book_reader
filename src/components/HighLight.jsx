@@ -8,6 +8,7 @@ import {
 } from "react-bootstrap";
 import { copyTextToClipboard } from "@/utils";
 import { useEffect, useState } from "react";
+import * as Api from "@/api";
 export default function Index(props) {
 	const [highLight, set_highLight] = useState({
 		show: false,
@@ -17,16 +18,19 @@ export default function Index(props) {
 		cfiRange: "",
 		reviewShow: false,
 		myHighLightData: null,
+		bookId: -1,
 	});
 	const [isTop, set_isTop] = useState(true);
 	useEffect(() => {
 		props.bookShowPromise.then((bookShow) => {
+			set_highLight({ ...highLight, bookId: bookShow.bookId });
 			bookShow.on(
 				"highLight",
 				({ cfiRange, coord, selection, rect, myHighLightData }) => {
-					let marginY = 10; //菜单上下的间距
+					let marginY = 5; //菜单上下的间距
 					let bottom = 0;
 					let height = document.getElementById("high-light-menu").clientHeight;
+					let width = document.getElementById("high-light-menu").clientWidth;
 					if (
 						rect.y - height - marginY * 2 >
 						bookShow.rendition.manager.container.offsetTop
@@ -42,8 +46,9 @@ export default function Index(props) {
 						set_isTop(false);
 					}
 					set_highLight({
+						bookId:bookShow.bookId,
 						show: true,
-						left: coord[0],
+						left: coord[0] + rect.width / 2 - width / 2,
 						bottom: bottom,
 						text: selection.toString(),
 						cfiRange,
@@ -56,12 +61,12 @@ export default function Index(props) {
 					});
 				}
 			);
-			// bookShow.on("click", (e) => {
-			// 	set_highLight({
-			// 		...highLight,
-			// 		show: false,
-			// 	});
-			// });
+			bookShow.on("click", (e) => {
+				set_highLight({
+					...highLight,
+					show: false,
+				});
+			});
 		});
 	}, []);
 	const setHighLight = (type) => {
@@ -79,6 +84,42 @@ export default function Index(props) {
 			show: false,
 		});
 	};
+	const onSaveReview = (review) => {
+		highLight.myHighLightData.review = review;
+		highLight.reviewShow = false;
+		set_highLight({ ...highLight });
+		Api.saveMyHighLightData(
+			highLight.bookId,
+			highLight.myHighLightData.type,
+			highLight.myHighLightData.cfiRange,
+			highLight.myHighLightData.review,
+			highLight.myHighLightData.id
+		).then((res) => {
+			if (res.code === 0) {
+				bookShow._highLight(
+					highLight.myHighLightData.type,
+					highLight.myHighLightData.cfiRange,
+					highLight.myHighLightData
+				);
+			}
+		});
+	};
+	const onDeleteReview = () => {
+		highLight.myHighLightData.review = "";
+		set_highLight({ ...highLight });
+		Api.removeMyHighLightData(
+			highLight.bookId,
+			highLight.myHighLightData.id
+		).then((res) => {
+			if (res.code === 0) {
+				bookShow._highLight(
+					highLight.myHighLightData.type,
+					highLight.myHighLightData.cfiRange,
+					highLight.myHighLightData
+				);
+			}
+		});
+	};
 	return (
 		<div
 			className="position-absolute"
@@ -91,7 +132,6 @@ export default function Index(props) {
 		>
 			{isTop ? (
 				<HighLightReview
-					// show={highLight.reviewShow}
 					highLight={highLight}
 					updateShow={(e) => {
 						set_highLight({
@@ -99,6 +139,8 @@ export default function Index(props) {
 							reviewShow: e,
 						});
 					}}
+					onSave={onSaveReview}
+					onDelete={onDeleteReview}
 				></HighLightReview>
 			) : null}
 			<ButtonGroup>
@@ -159,6 +201,8 @@ export default function Index(props) {
 							reviewShow: e,
 						});
 					}}
+					onSave={onSaveReview}
+					onDelete={onDeleteReview}
 				></HighLightReview>
 			) : null}
 		</div>
@@ -168,18 +212,17 @@ function HighLightReview(props) {
 	if (!props.highLight.myHighLightData) {
 		return null;
 	}
-	let needAdd = !props.highLight.myHighLightData.review;
-	const [show, set_show] = useState(false);
+	let needAdd = props.highLight.myHighLightData.review;
+	const [review, set_review] = useState(props.highLight.myHighLightData.review);
 	useEffect(() => {
-		set_show(props.highLight.reviewShow);
-	}, [props.highLight.reviewShow]);
+		set_review(props.highLight.myHighLightData.review);
+	}, [props.highLight.myHighLightData.review]);
 	return (
 		<Toast
 			onClose={(e) => {
-				set_show(false);
 				props.updateShow(false);
 			}}
-			style={{ opacity: show ? "1" : "0" }}
+			style={{ opacity: props.highLight.show ? "1" : "0" }}
 			animation={true}
 		>
 			<Toast.Header closeButton={needAdd}>
@@ -200,13 +243,11 @@ function HighLightReview(props) {
 							<Form.Control
 								type="text"
 								placeholder="说点什么"
-								onChange={(e) =>
-									props.onReviewChange({ review: e.target.value })
-								}
+								onChange={(e) => set_review(e.target.value)}
 							/>
 						</FloatingLabel>
 						<div className="d-flex justify-content-center">
-							<Button variant="primary" type="submit">
+							<Button variant="primary" onClick={(e) => props.onSave(review)}>
 								提交
 							</Button>
 						</div>

@@ -3,6 +3,8 @@ import * as Api from "@/api";
 export default class BookShow extends EventClass {
 	constructor(bookId, ele) {
 		super();
+		this.annoMap = {};
+		this.ExcuteClick = true;
 		this.bookId = bookId;
 		const url = Api.baseURL + "/static/files/" + this.bookId;
 		this.myAnnotations = {};
@@ -14,6 +16,8 @@ export default class BookShow extends EventClass {
 		this.rendition = book.renderTo(ele, {
 			width: "100%",
 			height: "100%",
+			spread: "none",
+			layout: "pre-paginated",
 		});
 		this.rendition.themes.default({
 			"::selection": {
@@ -53,18 +57,25 @@ export default class BookShow extends EventClass {
 		this.rendition.on("selected", (cfiRange, contents) => {
 			this.onSelectedAndMarkClicked(cfiRange, contents);
 		});
-		this.rendition.on("markClicked", (cfiRange, data, contents, a, b, c, d) => {
-			console.log(cfiRange, contents, data, a, b, c, d);
+		this.rendition.on("markClicked", (cfiRange, data, contents) => {
 			this.onSelectedAndMarkClicked(cfiRange, contents, data);
-		});
-		this.rendition.on("rendered", (section, iframe) => {
-			iframe.window.addEventListener("click", (e) => {
-				this.emit("click", e);
+			this.ExcuteClick = false;
+			setTimeout(() => {
+				this.ExcuteClick = true;
 			});
 		});
-		window.addEventListener("click", (e) => {
+		const onClick = (e) => {
+			if (!this.ExcuteClick) return;
 			this.emit("click", e);
+		};
+		this.rendition.on("rendered", (section, iframe) => {
+			iframe.window.addEventListener("click", (e) => {
+				onClick(e);
+			});
 		});
+		// window.addEventListener("click", (e) => {
+		// 	onClick(e);
+		// });
 	}
 	onSelectedAndMarkClicked(cfiRange, contents, myHighLightData) {
 		let selection = contents.window.getSelection();
@@ -101,8 +112,12 @@ export default class BookShow extends EventClass {
 		});
 	}
 	_highLight(type, cfiRange, myHighLightData) {
+		if (this.annoMap[cfiRange]) {
+			this.rendition.annotations.remove(cfiRange);
+			delete this.annoMap[cfiRange];
+		}
 		let id = getAnnoId(type, cfiRange);
-		this.rendition.annotations.add(
+		const anno = this.rendition.annotations.add(
 			type,
 			cfiRange,
 			{ ...myHighLightData, annoId: id },
@@ -110,6 +125,7 @@ export default class BookShow extends EventClass {
 			"my-" + type,
 			{}
 		);
+		this.annoMap[cfiRange] = anno;
 	}
 	highLight(type, cfiRange, myHighLightData) {
 		//如果myHighLightData中ID存在，则认为是显示，否则认为是新建，缺少更新逻辑
