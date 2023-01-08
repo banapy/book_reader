@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import Style from "./BookRender.module.scss";
-import { loadScript } from "@/utils/index";
 import BookShow from "./BookShow";
 export default function Index(props) {
 	const ref = useRef();

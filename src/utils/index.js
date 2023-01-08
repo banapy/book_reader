@@ -12,6 +12,19 @@ export function setAuthInfo(setAuth) {
         )
     }
 }
+export function getDefer() {
+    let _resolve;
+    let _reject;
+    let promise = new Promise((resolve, reject) => {
+        _resolve = resolve;
+        _reject = reject;
+    });
+    return {
+        promise,
+        resolve: _resolve,
+        reject: _reject,
+    };
+}
 export function makeTreeFromList(list) {
     const newList = []
     const findParent = (parentId) => {
@@ -59,19 +72,6 @@ export function copyTextToClipboard(text) {
         return;
     }
     return navigator.clipboard.writeText(text)
-}
-export function getDefer() {
-    let _resolve;
-    let _reject;
-    let promise = new Promise((resolve, reject) => {
-        _resolve = resolve;
-        _reject = reject;
-    });
-    return {
-        promise,
-        resolve: _resolve,
-        reject: _reject,
-    };
 }
 export function uuid() {
     var s = [];
@@ -132,6 +132,26 @@ export function readFilePart(file, offset, readBytes) {
     }
     return defer.promise
 }
+export function readFileContent(file) {
+    let defer = getDefer()
+    const fileReader = new FileReader()
+    fileReader.readAsArrayBuffer(file);
+    fileReader.onload = function (evt) {
+        if (evt.target.error == null) {
+
+            defer.resolve(evt.target.result)
+        } else {
+            defer.reject()
+        }
+    }
+    return defer.promise
+}
+export async function fileToBlob(file) {
+    const content = readFileContent(file)
+    let blob = new Blob([content], { type: file.type });
+    return blob
+}
+
 export function arrayBufferToBase64(buffer) {
     var binary = '';
     var bytes = new Uint8Array(buffer);
@@ -334,3 +354,25 @@ export function isMobile() {
 // export * from './time'
 // export * from './useFunc'
 // export * from './useLibrary'
+
+export function getBase64Image(img) {
+    var canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0, img.width, img.height);
+    var dataURL = canvas.toDataURL("image/png");
+    return dataURL
+}
+
+export function getImgBase64FromSrc(src) {
+    var img = document.createElement('img');
+    img.src = src
+    img.crossOrigin = 'anonymous'
+    const defer = getDefer()
+    img.onload = function () {
+        var data = getBase64Image(img);
+        defer.resolve(data)
+    }
+    return defer.promise
+}

@@ -14,6 +14,7 @@ import Message from './views/message'
 import Account from './views/account'
 import Setting from './views/setting'
 import Register from './views/register'
+import BookIntro from './views/bookIntro'
 import { RecoilRoot } from "recoil";
 const router = createHashRouter([
   {
@@ -24,6 +25,11 @@ const router = createHashRouter([
   {
     path: "/bookViewer/:bookId",
     element: <BookViewer></BookViewer>,
+    errorElement: <Error />,
+  },
+  {
+    path: "/bookIntro/:bookId",
+    element: <BookIntro></BookIntro>,
     errorElement: <Error />,
   },
   {
@@ -62,7 +68,9 @@ const router = createHashRouter([
     errorElement: <Error />,
   },
 ]);
+import BookEngine from "./bookEngine/BookEngine";
 function App() {
+  window.be = new BookEngine()
   return (
     <RecoilRoot>
       <RouterProvider router={router} />

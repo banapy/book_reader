@@ -4,68 +4,20 @@ import BookCard from "@/components/BookCard";
 import { authAtom } from "@/atoms";
 import { axios } from "@/api";
 import Layout from "@/components/Layout";
-import * as Api from "@/api";
 
 export default function Index(props) {
-	// const bookProxyList = [
-	// 	{
-	// 		id: 0,
-	// 		type: "链接",
-	// 		info: {
-	// 			url: "https://react-reader.metabits.no/files/alice.epub",
-	// 			cover: "http://img3m9.ddimg.cn/26/10/27669239-1_w_1.jpg",
-	// 			bookName: "Alice",
-	// 		},
-	// 	},
-	// 	{
-	// 		id: 1,
-	// 		type: "链接",
-	// 		info: {
-	// 			url: "https://s3.amazonaws.com/moby-dick/moby-dick.epub",
-	// 			cover: "http://img3m5.ddimg.cn/74/8/1137309005-1_w_1.jpg",
-	// 			bookName: "Moby-Dick",
-	// 		},
-	// 	},
-	// 	{
-	// 		id: 2,
-	// 		type: "链接",
-	// 		info: {
-	// 			url: "https://s3.amazonaws.com/moby-dick/moby-dick.epub",
-	// 			cover: "http://img3m5.ddimg.cn/74/8/1137309005-1_w_1.jpg",
-	// 			bookName: "Moby-Dick",
-	// 		},
-	// 	},
-	// 	{
-	// 		id: 3,
-	// 		type: "链接",
-	// 		info: {
-	// 			url: "https://s3.amazonaws.com/moby-dick/moby-dick.epub",
-	// 			cover: "http://img3m5.ddimg.cn/74/8/1137309005-1_w_1.jpg",
-	// 			bookName: "Moby-Dick",
-	// 		},
-	// 	},
-	// ];
 	const [bookList, set_bookList] = useState([]);
 	const [auth] = useRecoilState(authAtom);
 	useEffect(() => {
-		axios
-			.get("/api/bookRoom/userInfo/books", {
-				params: {
-					uid: auth.uid,
-				},
-			})
-			.then((res) => {
-				if (res.code === 0) {
-					let v = res.data.map((x) => {
-						x.coverage =
-							process.env.REACT_APP_SERVER_IMG +
-							x.coverage +
-							"?w=200&h=300";
-						return x;
-					});
-					set_bookList(v);
-				}
-			});
+		be.initDefer.promise.then((res) => {
+			const changed = () => {
+				const bookList = be.getBookList();
+				set_bookList(bookList);
+			};
+			changed()
+			be.on("addBook",changed);
+			be.on("removeBook",changed);
+		});
 	}, []);
 	let mainPage = (
 		<Layout>
@@ -74,9 +26,9 @@ export default function Index(props) {
 					{bookList.map((x) => {
 						return (
 							<BookCard
-								cover={x.coverage}
-								bookName={x.title}
-								id={x.fileId}
+								cover={x.metaData.cover}
+								bookName={x.metaData.name}
+								id={x.id}
 							></BookCard>
 						);
 					})}

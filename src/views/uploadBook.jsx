@@ -8,7 +8,10 @@ import Layout from "@/components/Layout";
 export default function Index() {
 	const [fileList, set_fileList] = useState([]);
 	const onChange = (files) => {
-		set_fileList(files);
+		// set_fileList(files);
+		files.forEach((file) => {
+			be.addBookFromFile(file);
+		});
 	};
 	return (
 		<Layout>
