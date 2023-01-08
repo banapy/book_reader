@@ -8,6 +8,7 @@ import {
 } from "react-bootstrap";
 import { copyTextToClipboard } from "@/utils";
 import { useEffect, useState } from "react";
+import * as Api from "@/api";
 export default function Index(props) {
 	const [highLight, set_highLight] = useState({
 		show: false,
@@ -73,6 +74,42 @@ export default function Index(props) {
 			show: false,
 		});
 	};
+	const onSaveReview = (review) => {
+		highLight.myHighLightData.review = review;
+		highLight.reviewShow = false;
+		set_highLight({ ...highLight });
+		Api.saveMyHighLightData(
+			highLight.bookId,
+			highLight.myHighLightData.type,
+			highLight.myHighLightData.cfiRange,
+			highLight.myHighLightData.review,
+			highLight.myHighLightData.id
+		).then((res) => {
+			if (res.code === 0) {
+				bookShow._highLight(
+					highLight.myHighLightData.type,
+					highLight.myHighLightData.cfiRange,
+					highLight.myHighLightData
+				);
+			}
+		});
+	};
+	const onDeleteReview = () => {
+		highLight.myHighLightData.review = "";
+		set_highLight({ ...highLight });
+		Api.removeMyHighLightData(
+			highLight.bookId,
+			highLight.myHighLightData.id
+		).then((res) => {
+			if (res.code === 0) {
+				bookShow._highLight(
+					highLight.myHighLightData.type,
+					highLight.myHighLightData.cfiRange,
+					highLight.myHighLightData
+				);
+			}
+		});
+	};
 	return (
 		<div
 			className="position-absolute"
@@ -92,6 +129,8 @@ export default function Index(props) {
 							reviewShow: e,
 						});
 					}}
+					onSave={onSaveReview}
+					onDelete={onDeleteReview}
 				></HighLightReview>
 			) : null}
 			<div class="flex items-center justify-center shadow rounded p-1 bg-gray-400">
@@ -179,6 +218,8 @@ export default function Index(props) {
 							reviewShow: e,
 						});
 					}}
+					onSave={onSaveReview}
+					onDelete={onDeleteReview}
 				></HighLightReview>
 			) : null}
 		</div>
@@ -191,15 +232,14 @@ function HighLightReview(props) {
 	let needAdd = !props.highLight.userData.review;
 	const [show, set_show] = useState(false);
 	useEffect(() => {
-		set_show(props.highLight.reviewShow);
-	}, [props.highLight.reviewShow]);
+		set_review(props.highLight.myHighLightData.review);
+	}, [props.highLight.myHighLightData.review]);
 	return (
 		<Toast
 			onClose={(e) => {
-				set_show(false);
 				props.updateShow(false);
 			}}
-			style={{ opacity: show ? "1" : "0" }}
+			style={{ opacity: props.highLight.show ? "1" : "0" }}
 			animation={true}
 		>
 			<Toast.Header closeButton={needAdd}>
@@ -218,13 +258,11 @@ function HighLightReview(props) {
 							<Form.Control
 								type="text"
 								placeholder="说点什么"
-								onChange={(e) =>
-									props.onReviewChange({ review: e.target.value })
-								}
+								onChange={(e) => set_review(e.target.value)}
 							/>
 						</FloatingLabel>
 						<div className="d-flex justify-content-center">
-							<Button variant="primary" type="submit">
+							<Button variant="primary" onClick={(e) => props.onSave(review)}>
 								提交
 							</Button>
 						</div>
