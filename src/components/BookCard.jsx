@@ -7,12 +7,12 @@ import {
 	useContextMenu,
 } from "react-contexify";
 import "react-contexify/ReactContexify.css";
-const MENU_ID = "blahblah";
 export default function Index(props) {
 	const navigate = useNavigate();
 	const onClickBook = () => {
 		navigate("/bookIntro/" + props.id);
 	};
+	const MENU_ID = props.id;
 	const { show } = useContextMenu({
 		id: MENU_ID,
 	});
@@ -29,8 +29,16 @@ export default function Index(props) {
 			case "删除":
 				be.removeBook(props.id);
 				break;
+			case "爱了":
+				be.addFavoriteBook(props.id);
+				break;
+			case "不爱了":
+				be.removeFavoriteBook(props.id);
+				break;
 		}
 	};
+	console.log("props.isFavorite");
+	console.log(props.isFavorite);
 	return (
 		<div
 			className="d-flex flex-column align-items-center"
@@ -46,6 +54,15 @@ export default function Index(props) {
 				<Item id="删除" onClick={handleItemClick}>
 					删除
 				</Item>
+				{props.isFavorite ? (
+					<Item id="不爱了" onClick={handleItemClick}>
+						不爱了💔
+					</Item>
+				) : (
+					<Item id="爱了" onClick={handleItemClick}>
+						爱了💕
+					</Item>
+				)}
 			</Menu>
 		</div>
 	);

@@ -22,7 +22,7 @@ export function getReadingInfo(bookId) {
         }
     });
 }
-export function saveMyHighLightData(bookId, type, cfiRange, review, highLightId) {
+export function saveuserData(bookId, type, cfiRange, review, highLightId) {
     let userInfo = getUserInfo()
     return axios.post("/api/bookRoom/userInfo/readingInfos", {
         uid: userInfo.uid,
@@ -36,7 +36,7 @@ export function saveMyHighLightData(bookId, type, cfiRange, review, highLightId)
         }
     });
 }
-export function removeMyHighLightData(bookId, highLightId) {
+export function removeuserData(bookId, highLightId) {
     let userInfo = getUserInfo()
     return axios.post("/api/bookRoom/userInfo/readingInfos/highLights/delete", {
         uid: userInfo.uid,

@@ -1,21 +1,24 @@
 import { useEffect, useRef, useState } from "react";
-import BookShow from "./BookShow";
+import HighLight from "@/components/HighLight";
 export default function Index(props) {
 	const ref = useRef();
 	useEffect(() => {
-		let bookShow = new BookShow(props.bookId, ref.current);
-		props.onRender && props.onRender(bookShow);
+		be.initDefer.promise.then(() => {
+			be.renderBook(props.bookId, "book-viewer");
+		});
 		return () => {
-			bookShow.destroy();
+			be.cancelRender();
 		};
 	}, []);
 	return (
 		<>
 			<div
-				style={{ height: "100%", width: "100%", margin: "auto", zIndex: 0 }}
+				style={{ zIndex: 0 }}
 				ref={ref}
 				id="book-viewer"
+				className="w-full m-auto"
 			></div>
+			<HighLight></HighLight>
 		</>
 	);
 }

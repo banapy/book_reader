@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getDefer } from "@/utils";
 import Layout from "@/components/Layout";
 export default function Index(props) {
@@ -15,7 +15,7 @@ export default function Index(props) {
 	}, []);
 	const navigate = useNavigate();
 	const onClickBook = () => {
-		navigate("/bookViewer/" + props.id);
+		navigate("/bookViewer/" + bookId);
 	};
 	return (
 		<Layout>

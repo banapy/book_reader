@@ -1,6 +1,3 @@
-import Book from "../Book";
-import BookMetaData from "./BookMetaData";
-
 export default class Storage {
     constructor() {
         this.dbName = this.getDbName()
@@ -15,8 +12,8 @@ export default class Storage {
                 return this.db.find({
                     selector,
                     fields: fields,
-                    descending: true, // 降序排列
-                    skip: pageSize * pageNo,// 第3页
+                    // descending: true, // 降序排列
+                    skip: pageSize * (pageNo - 1),// 第3页
                     limit: pageSize // 每页10条
                 })
             } else {

@@ -8,8 +8,12 @@ body {
 		sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	height: 100vh;
+	border: transparent 1px solid;
 }
-
+#root{
+	height: 100vh;
+}
 code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
 		monospace;
@@ -33,5 +37,5 @@ code {
 	stroke-width: 1;
 }
 .my-mark {
-  
 }
+@import "rc-tooltip/assets/bootstrap.css";

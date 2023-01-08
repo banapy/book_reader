@@ -18,7 +18,6 @@ export default function Index(props) {
 	const onClick = () => {
 		props.bookShowPromise.then((bookShow) => {
 			console.log(bookShow);
-			
 		});
 	};
 	return (
@@ -35,11 +34,11 @@ export default function Index(props) {
 					</Navbar.Collapse>
 				</Container>
 			</Navbar> */}
-			<div style={{ height: "90vh", width: "80%", margin: "auto" }}>
-				{props.children}
-			</div>
+			<div style={{ width: "80%", margin: "auto" }}>{props.children}</div>
 			<RightMenu bookShowPromise={props.bookShowPromise}>
-				<Button variant="primary" onClick={onClick}>测试按钮</Button>
+				<Button variant="primary" onClick={onClick}>
+					测试按钮
+				</Button>
 			</RightMenu>
 		</div>
 	);
@@ -69,7 +68,9 @@ function RightMenu(props) {
 						overlay={
 							<Popover id="popover-basic">
 								<Popover.Body style={{ padding: "0px" }}>
-									<BookChapters bookShowPromise={props.bookShowPromise}></BookChapters>
+									<BookChapters
+										bookShowPromise={props.bookShowPromise}
+									></BookChapters>
 								</Popover.Body>
 							</Popover>
 						}

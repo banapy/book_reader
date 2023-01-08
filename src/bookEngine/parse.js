@@ -27,6 +27,11 @@ export function parseEpub(file) {
         size: file.size,
         toc: []
     }
+    let extension = file.name
+        .split(".")
+        .reverse()[0]
+        .toLocaleLowerCase();
+    bookSchema.format = extension
     return Promise.all([
         fetchMD5(file).then(res => {
             bookSchema.md5 = res

@@ -1,11 +1,14 @@
 
 import BookMetaData from "./storage/BookMetaData"
 import * as Parse from './parse'
-export default class Book {
+import { EventClass } from './EventClass'
+export default class Book extends EventClass {
     constructor(options) {
+        super()
         this.options = options
         this.storage = options.storage
         this.metaData = null
+        this._isFavorite = false
         if (options.metaData) {
             this.metaData = options.metaData
         }
@@ -24,8 +27,8 @@ export default class Book {
         return extension === "epub"
     }
     static async getListFromStorage(storage) {
-        const res = await storage.get({ pageSize: 9999, pageNo: 1, })
-        const bookSchemaList = res.rows.map(x => x.doc)
+        const res = await storage.get({ pageSize: 9999, pageNo: 1, selector: { docTypeIn: { $eq: BookMetaData.docType } } })
+        const bookSchemaList = res.docs
         console.log(bookSchemaList)
         return bookSchemaList.map(bookSchema => {
             const book = new Book({ metaData: new BookMetaData(bookSchema), storage: storage })
@@ -41,6 +44,19 @@ export default class Book {
     get rev() {
         return this.metaData.rev
     }
+    get isFavorite() {
+        return this._isFavorite
+    }
+    set isFavorite(v) {
+        const oldValue = this._isFavorite
+        this._isFavorite = v
+        this.emit("bookChanged", {
+            oldValue: oldValue,
+            newValue: v,
+            field: "isFavorite"
+        })
+
+    }
     setStorage(storage) {
         this.storage = storage
     }
@@ -51,8 +67,8 @@ export default class Book {
         this.metaData.addAttachment("file", file)
         this.save()
     }
-    getFileByBookSchemaId(bookSchemaId) {
-        return this.db.getAttachment(bookSchemaId, "file").then(blob => {
+    getFileFromStorage() {
+        return this.db.getAttachment(this.metaData.id, "file").then(blob => {
             return blob
         })
     }
@@ -78,10 +94,14 @@ export default class Book {
             return res.docs[0]
         })
     }
+
     update() {
 
     }
     delete() {
         return this.db.remove(this.id, this.rev)
+    }
+    render() {
+
     }
 }

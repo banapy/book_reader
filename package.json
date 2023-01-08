@@ -16,6 +16,7 @@
     "bootstrap": "^5.2.3",
     "image-to-base64": "^2.2.0",
     "mitt": "^3.0.0",
+    "rc-tooltip": "^5.2.2",
     "react": "^18.2.0",
     "react-bootstrap": "^2.6.0",
     "react-contexify": "^6.0.0",
@@ -55,6 +56,7 @@
   },
   "devDependencies": {
     "autoprefixer": "9",
+    "craco-plugin-svg-sprite": "^1.0.0",
     "postcss": "7",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17"
   }

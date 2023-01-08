@@ -14,9 +14,10 @@ export default function Index(props) {
 				const bookList = be.getBookList();
 				set_bookList(bookList);
 			};
-			changed()
-			be.on("addBook",changed);
-			be.on("removeBook",changed);
+			changed();
+			be.on("addBook", changed);
+			be.on("removeBook", changed);
+			be.on("bookChanged", changed);
 		});
 	}, []);
 	let mainPage = (
@@ -29,6 +30,7 @@ export default function Index(props) {
 								cover={x.metaData.cover}
 								bookName={x.metaData.name}
 								id={x.id}
+								isFavorite={x.isFavorite}
 							></BookCard>
 						);
 					})}

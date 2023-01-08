@@ -16,63 +16,57 @@ export default function Index(props) {
 		text: "",
 		cfiRange: "",
 		reviewShow: false,
-		myHighLightData: null,
+		userData: null,
 	});
 	const [isTop, set_isTop] = useState(true);
 	useEffect(() => {
-		props.bookShowPromise.then((bookShow) => {
-			bookShow.on(
-				"highLight",
-				({ cfiRange, coord, selection, rect, myHighLightData }) => {
-					let marginY = 10; //菜单上下的间距
-					let bottom = 0;
-					let height = document.getElementById("high-light-menu").clientHeight;
-					if (
-						rect.y - height - marginY * 2 >
-						bookShow.rendition.manager.container.offsetTop
-					) {
-						//菜单显示到到选中文字的上方
-						bottom = document.body.clientHeight - coord[1] + marginY * 2;
-						set_isTop(true);
-					} else {
-						//菜单显示到到选中文字的下方
-						bottom =
-							document.body.clientHeight -
-							(coord[1] + rect.height + height + marginY);
-						set_isTop(false);
-					}
-					set_highLight({
-						show: true,
-						left: coord[0],
-						bottom: bottom,
-						text: selection.toString(),
-						cfiRange,
-						myHighLightData,
-						reviewShow: myHighLightData
-							? myHighLightData.review === ""
-								? false
-								: true
-							: false,
-					});
+		be.initDefer.promise.then(() => {
+			be.on("highLight", ({ cfiRange, coord, selection, rect, userData }) => {
+				let marginY = 10; //菜单上下的间距
+				let bottom = 0;
+				let height = document.getElementById("high-light-menu").clientHeight;
+				if (
+					rect.y - height - marginY * 2 >
+					be.render._render.rendition.manager.container.offsetTop
+				) {
+					//菜单显示到到选中文字的上方
+					bottom = document.body.clientHeight - coord[1] + marginY * 2;
+					set_isTop(true);
+				} else {
+					//菜单显示到到选中文字的下方
+					bottom =
+						document.body.clientHeight -
+						(coord[1] + rect.height + height + marginY);
+					set_isTop(false);
 				}
-			);
-			// bookShow.on("click", (e) => {
-			// 	set_highLight({
-			// 		...highLight,
-			// 		show: false,
-			// 	});
-			// });
+				set_highLight({
+					show: true,
+					left: coord[0],
+					bottom: bottom,
+					text: selection.toString(),
+					cfiRange,
+					userData,
+					reviewShow: userData
+						? userData.review === ""
+							? false
+							: true
+						: false,
+				});
+			});
+			be.on("click", () => {
+				set_highLight({
+					...highLight,
+					show: false,
+				});
+			});
 		});
 	}, []);
 	const setHighLight = (type) => {
 		if (type !== "删除划线") {
-			props.bookShowPromise.then((bookShow) => {
-				bookShow.highLight(type, highLight.cfiRange, { review: "" });
-			});
+			be.addHighLight(type, highLight.cfiRange, highLight.text, { review: "" });
 		} else {
-			props.bookShowPromise.then((bookShow) => {
-				bookShow.removeHighLight(highLight.myHighLightData);
-			});
+			//此处的highLight.userData.highLight就是上面的addHeighLight的参数
+			be.removeHighLight(highLight.userData.highLight);
 		}
 		set_highLight({
 			...highLight,
@@ -91,7 +85,6 @@ export default function Index(props) {
 		>
 			{isTop ? (
 				<HighLightReview
-					// show={highLight.reviewShow}
 					highLight={highLight}
 					updateShow={(e) => {
 						set_highLight({
@@ -101,57 +94,84 @@ export default function Index(props) {
 					}}
 				></HighLightReview>
 			) : null}
-			<ButtonGroup>
-				<Button
-					onClick={(e) => {
-						copyTextToClipboard(highLight.text);
-					}}
+			<div class="flex items-center justify-center shadow rounded p-1 bg-gray-400">
+				<div
+					class="inline-flex shadow-md hover:shadow-lg focus:shadow-lg"
+					role="group"
 				>
-					复制
-				</Button>
-				<Button
-					onClick={(e) => {
-						setHighLight("highlight");
-					}}
-				>
-					马克笔
-				</Button>
-				<Button
-					onClick={(e) => {
-						setHighLight("underline");
-					}}
-				>
-					直线
-				</Button>
-				<Button
-					onClick={(e) => {
-						setHighLight("mark");
-					}}
-				>
-					标记
-				</Button>
-				<Button
-					onClick={(e) => {
-						setHighLight("删除划线");
-					}}
-				>
-					删除划线
-				</Button>
-				<Button
-					onClick={(e) => {
-						set_highLight({
-							...highLight,
-							reviewShow: true,
-						});
-					}}
-				>
-					写想法
-				</Button>
-				<Button>查询</Button>
-			</ButtonGroup>
+					<button
+						type="button"
+						class=" inline-block px-6 py-2.5 bg-gray-800 text-white font-medium text-xs leading-tight uppercase hover:bg-gray-400 focus:bg-gray-400 focus:outline-none focus:ring-0 active:bg-blue-800 transition duration-150 ease-in-out"
+						onClick={(e) => {
+							copyTextToClipboard(highLight.text);
+						}}
+					>
+						复制
+					</button>
+					<button
+						type="button"
+						class=" inline-block px-6 py-2.5 bg-gray-800 text-white font-medium text-xs leading-tight uppercase hover:bg-gray-400 focus:bg-gray-400 focus:outline-none focus:ring-0 active:bg-blue-800 transition duration-150 ease-in-out"
+						onClick={(e) => {
+							setHighLight("highlight");
+						}}
+					>
+						马克笔
+					</button>
+					<button
+						type="button"
+						class=" inline-block px-6 py-2.5 bg-gray-800 text-white font-medium text-xs leading-tight uppercase hover:bg-gray-400 focus:bg-gray-400 focus:outline-none focus:ring-0 active:bg-blue-800 transition duration-150 ease-in-out"
+						onClick={(e) => {
+							setHighLight("underline");
+						}}
+					>
+						直线
+					</button>
+					<button
+						type="button"
+						class=" inline-block px-6 py-2.5 bg-gray-800 text-white font-medium text-xs leading-tight uppercase hover:bg-gray-400 focus:bg-gray-400 focus:outline-none focus:ring-0 active:bg-blue-800 transition duration-150 ease-in-out"
+						onClick={(e) => {
+							setHighLight("mark");
+						}}
+					>
+						标记
+					</button>
+					<button
+						type="button"
+						class=" inline-block px-6 py-2.5 bg-gray-800 text-white font-medium text-xs leading-tight uppercase hover:bg-gray-400 focus:bg-gray-400 focus:outline-none focus:ring-0 active:bg-blue-800 transition duration-150 ease-in-out"
+						onClick={(e) => {
+							setHighLight("删除划线");
+						}}
+					>
+						删除划线
+					</button>
+					<button
+						type="button"
+						class=" inline-block px-6 py-2.5 bg-gray-800 text-white font-medium text-xs leading-tight uppercase hover:bg-gray-400 focus:bg-gray-400 focus:outline-none focus:ring-0 active:bg-blue-800 transition duration-150 ease-in-out"
+						onClick={(e) => {
+							set_highLight({
+								...highLight,
+								reviewShow: true,
+							});
+						}}
+					>
+						写想法
+					</button>
+					<button
+						type="button"
+						class=" inline-block px-6 py-2.5 bg-gray-800 text-white font-medium text-xs leading-tight uppercase hover:bg-gray-400 focus:bg-gray-400 focus:outline-none focus:ring-0 active:bg-blue-800 transition duration-150 ease-in-out"
+						onClick={(e) => {
+							set_highLight({
+								...highLight,
+								reviewShow: true,
+							});
+						}}
+					>
+						查询
+					</button>
+				</div>
+			</div>
 			{!isTop ? (
 				<HighLightReview
-					// show={highLight.reviewShow}
 					highLight={highLight}
 					updateShow={(e) => {
 						set_highLight({
@@ -165,10 +185,10 @@ export default function Index(props) {
 	);
 }
 function HighLightReview(props) {
-	if (!props.highLight.myHighLightData) {
+	if (!props.highLight.userData) {
 		return null;
 	}
-	let needAdd = !props.highLight.myHighLightData.review;
+	let needAdd = !props.highLight.userData.review;
 	const [show, set_show] = useState(false);
 	useEffect(() => {
 		set_show(props.highLight.reviewShow);
@@ -185,9 +205,7 @@ function HighLightReview(props) {
 			<Toast.Header closeButton={needAdd}>
 				<img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" />
 				<strong className="me-auto">评论</strong>
-				{needAdd ? null : (
-					<small>{props.highLight.myHighLightData.updateAt}</small>
-				)}
+				{needAdd ? null : <small>{props.highLight.userData.updateAt}</small>}
 			</Toast.Header>
 			<Toast.Body>
 				{needAdd ? (
@@ -213,7 +231,7 @@ function HighLightReview(props) {
 					</Form>
 				) : (
 					<div>
-						<p>{props.highLight.myHighLightData.review}</p>
+						<p>{props.highLight.userData.review}</p>
 						<Button variant="link" onClick={props.onDelete}>
 							删除
 						</Button>

@@ -29,11 +29,11 @@ export default class BookShow extends EventClass {
 		});
 		Api.getReadingInfo(this.bookId).then((res) => {
 			if (res.code === 0) {
-				res.data.highLightList.forEach((myHighLightData) => {
+				res.data.highLightList.forEach((userData) => {
 					this.highLight(
-						myHighLightData.type,
-						myHighLightData.cfiRange,
-						myHighLightData
+						userData.type,
+						userData.cfiRange,
+						userData
 					);
 				});
 			}
@@ -66,7 +66,7 @@ export default class BookShow extends EventClass {
 			this.emit("click", e);
 		});
 	}
-	onSelectedAndMarkClicked(cfiRange, contents, myHighLightData) {
+	onSelectedAndMarkClicked(cfiRange, contents, userData) {
 		let selection = contents.window.getSelection();
 		let rect = selection.getRangeAt(0).getBoundingClientRect();
 		const delta = this.rendition._layout.delta;
@@ -78,7 +78,7 @@ export default class BookShow extends EventClass {
 			selection,
 			coord: [x, y],
 			rect,
-			myHighLightData,
+			userData,
 		});
 	}
 	initKeyboardEvent() {
@@ -100,49 +100,49 @@ export default class BookShow extends EventClass {
 			document.addEventListener("keyup", this.keyupCb, false);
 		});
 	}
-	_highLight(type, cfiRange, myHighLightData) {
+	_highLight(type, cfiRange, userData) {
 		let id = getAnnoId(type, cfiRange);
 		this.rendition.annotations.add(
 			type,
 			cfiRange,
-			{ ...myHighLightData, annoId: id },
+			{ ...userData, annoId: id },
 			this.onHighLightClick,
 			"my-" + type,
 			{}
 		);
 	}
-	highLight(type, cfiRange, myHighLightData) {
-		//如果myHighLightData中ID存在，则认为是显示，否则认为是新建，缺少更新逻辑
+	highLight(type, cfiRange, userData) {
+		//如果userData中ID存在，则认为是显示，否则认为是新建，缺少更新逻辑
 		let id = getAnnoId(type, cfiRange);
 		let anno = this.rendition.annotations._annotations[id];
 		if (!anno) {
-			if (myHighLightData.id) {
+			if (userData.id) {
 				//将后台返回的数据高亮
-				this._highLight(type, cfiRange, myHighLightData);
+				this._highLight(type, cfiRange, userData);
 			} else {
 				//往后台新增，并高亮当前行
-				Api.saveMyHighLightData(
+				Api.saveuserData(
 					this.bookId,
 					type,
 					cfiRange,
-					myHighLightData.review
+					userData.review
 				).then((res) => {
 					if (res.code === 0) {
-						myHighLightData.id = res.data.highLightId;
-						this._highLight(type, cfiRange, myHighLightData);
+						userData.id = res.data.highLightId;
+						this._highLight(type, cfiRange, userData);
 					}
 				});
 			}
 		} else {
-			console.error("anno已存在", type, cfiRange, myHighLightData);
+			console.error("anno已存在", type, cfiRange, userData);
 		}
 	}
-	removeHighLight(myHighLightData) {
-		Api.removeMyHighLightData(this.bookId, myHighLightData.id).then((res) => {
+	removeHighLight(userData) {
+		Api.removeuserData(this.bookId, userData.id).then((res) => {
 			if (res.code == 0) {
 				this.rendition.annotations.remove(
-					myHighLightData.cfiRange,
-					myHighLightData.type
+					userData.cfiRange,
+					userData.type
 				);
 			}
 		});

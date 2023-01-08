@@ -1,9 +1,11 @@
 export default class PouchDBModel {
-    constructor(document) {
+    constructor(document, NoModelParams) {
         this._id = document._id
         this._rev = document._rev
         this._attachments = document._attachments
         this.docTypeIn = document.docTypeIn
+
+        this.NoModelParams = NoModelParams
     }
     get id() {
         return this._id
@@ -46,8 +48,20 @@ export default class PouchDBModel {
     toJson() {
         let res = {}
         for (let key in this) {
-            res[key] = this[key]
+            if (key !== "NoModelParams") {
+                res[key] = this[key]
+            }
         }
         return res
+    }
+    async update(storage) {
+        return storage.db.post(this.toJson()).then(res => {
+            this.id = res.id
+            this.rev = res.rev
+            return res
+        }).catch(e => {
+            console.error(e)
+            return e
+        })
     }
 }

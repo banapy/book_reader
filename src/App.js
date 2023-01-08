@@ -69,8 +69,9 @@ const router = createHashRouter([
   },
 ]);
 import BookEngine from "./bookEngine/BookEngine";
+import { useEffect } from "react";
+window.be = new BookEngine()
 function App() {
-  window.be = new BookEngine()
   return (
     <RecoilRoot>
       <RouterProvider router={router} />
