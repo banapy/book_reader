@@ -103,6 +103,7 @@ export default class BookEngine extends EventClass {
         const book = this.getBook(bookId)
         if (!book) throw "book is not exist"
         this.render.renderBook(book, eleId)
+        this.emit("renderBook", book)
     }
     //新增一条高亮
     addHighLight(type, cfiRange, text, userData) {

@@ -91,6 +91,9 @@ export default class UserConfig {
                 highLights: []
             }
         }
+        if (!this.model.bookTracker[bookId].highLights) {
+            this.model.bookTracker[bookId].highLights = []
+        }
         this.model.bookTracker[bookId].highLights.push(highLight)
         return this.model.update(this.storage)
     }
@@ -116,14 +119,17 @@ export default class UserConfig {
         throw "no implemention"
     }
     addReaingRecord(options) {
+        const { bookId, startTime, endTime } = options
         if (!this.model.bookTracker[bookId]) {
             this.model.bookTracker[bookId] = {
                 readingRecords: []
             }
         }
-        const { bookId, startTime, endTime } = options
+        if (!this.model.bookTracker[bookId].readingRecords) {
+            this.model.bookTracker[bookId].readingRecords = []
+        }
         this.model.bookTracker[bookId].readingRecords.push({
-            bookid, startTime, endTime
+            bookId, startTime, endTime
         })
     }
     destroy() {

@@ -8,7 +8,6 @@ import {
 } from "react-bootstrap";
 import { copyTextToClipboard } from "@/utils";
 import { useEffect, useState } from "react";
-import * as Api from "@/api";
 export default function Index(props) {
 	const [highLight, set_highLight] = useState({
 		show: false,
@@ -75,44 +74,45 @@ export default function Index(props) {
 		});
 	};
 	const onSaveReview = (review) => {
-		highLight.myHighLightData.review = review;
-		highLight.reviewShow = false;
-		set_highLight({ ...highLight });
-		Api.saveMyHighLightData(
-			highLight.bookId,
-			highLight.myHighLightData.type,
-			highLight.myHighLightData.cfiRange,
-			highLight.myHighLightData.review,
-			highLight.myHighLightData.id
-		).then((res) => {
-			if (res.code === 0) {
-				bookShow._highLight(
-					highLight.myHighLightData.type,
-					highLight.myHighLightData.cfiRange,
-					highLight.myHighLightData
-				);
-			}
-		});
+		// highLight.myHighLightData.review = review;
+		// highLight.reviewShow = false;
+		// set_highLight({ ...highLight });
+		// Api.saveMyHighLightData(
+		// 	highLight.bookId,
+		// 	highLight.myHighLightData.type,
+		// 	highLight.myHighLightData.cfiRange,
+		// 	highLight.myHighLightData.review,
+		// 	highLight.myHighLightData.id
+		// ).then((res) => {
+		// 	if (res.code === 0) {
+		// 		bookShow._highLight(
+		// 			highLight.myHighLightData.type,
+		// 			highLight.myHighLightData.cfiRange,
+		// 			highLight.myHighLightData
+		// 		);
+		// 	}
+		// });
 	};
 	const onDeleteReview = () => {
-		highLight.myHighLightData.review = "";
-		set_highLight({ ...highLight });
-		Api.removeMyHighLightData(
-			highLight.bookId,
-			highLight.myHighLightData.id
-		).then((res) => {
-			if (res.code === 0) {
-				bookShow._highLight(
-					highLight.myHighLightData.type,
-					highLight.myHighLightData.cfiRange,
-					highLight.myHighLightData
-				);
-			}
-		});
+		// highLight.myHighLightData.review = "";
+		// set_highLight({ ...highLight });
+		// Api.removeMyHighLightData(
+		// 	highLight.bookId,
+		// 	highLight.myHighLightData.id
+		// ).then((res) => {
+		// 	if (res.code === 0) {
+		// 		bookShow._highLight(
+		// 			highLight.myHighLightData.type,
+		// 			highLight.myHighLightData.cfiRange,
+		// 			highLight.myHighLightData
+		// 		);
+		// 	}
+		// });
 	};
+	console.log(highLight.left, highLight.bottom, highLight.show);
 	return (
 		<div
-			className="position-absolute"
+			className="absolute"
 			id="high-light-menu"
 			style={{
 				left: highLight.left + "px",
@@ -120,7 +120,7 @@ export default function Index(props) {
 				opacity: highLight.show ? "1" : "0",
 			}}
 		>
-			{isTop ? (
+			{/* {isTop ? (
 				<HighLightReview
 					highLight={highLight}
 					updateShow={(e) => {
@@ -132,7 +132,7 @@ export default function Index(props) {
 					onSave={onSaveReview}
 					onDelete={onDeleteReview}
 				></HighLightReview>
-			) : null}
+			) : null} */}
 			<div class="flex items-center justify-center shadow rounded p-1 bg-gray-400">
 				<div
 					class="inline-flex shadow-md hover:shadow-lg focus:shadow-lg"
@@ -209,7 +209,7 @@ export default function Index(props) {
 					</button>
 				</div>
 			</div>
-			{!isTop ? (
+			{/* {!isTop ? (
 				<HighLightReview
 					highLight={highLight}
 					updateShow={(e) => {
@@ -221,7 +221,7 @@ export default function Index(props) {
 					onSave={onSaveReview}
 					onDelete={onDeleteReview}
 				></HighLightReview>
-			) : null}
+			) : null} */}
 		</div>
 	);
 }
