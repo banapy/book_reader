@@ -1,6 +1,6 @@
 import { ReactTree } from "@naisutech/react-tree";
 import { useEffect, useRef, useState } from "react";
-// const treeData = [];
+
 function recurse(toc, parentId, treeData) {
 	if (Array.isArray(toc) && toc.length) {
 		for (let tocItem of toc) {
@@ -8,6 +8,7 @@ function recurse(toc, parentId, treeData) {
 				id: tocItem.id,
 				label: tocItem.label,
 				parentId: parentId,
+				tocItem: tocItem,
 			};
 			if (tocItem.subitems.length) {
 				node.items = [];
@@ -30,25 +31,31 @@ export default function Index(props) {
 			const treeData = recurse(book.metaData.toc, null, []);
 			set_loading(false);
 			set_realTreeData(treeData);
-			// let openNodeIdList = [];
 			let openNodeIdList = new Set();
 			for (let i of treeData) {
 				if (i.parentId !== null) {
 					openNodeIdList.add(i.parentId);
 				}
 			}
-			openNodeIdList = Array.from(openNodeIdList)
+			openNodeIdList = Array.from(openNodeIdList);
 			set_defaultOpenNodes(openNodeIdList);
 		});
 	}, []);
-	console.log(defaultOpenNodes, realTreeData);
+	const onToggleSelectedNodes = (nodeIdList) => {
+		if (!nodeIdList.length) return;
+		const nodeId = nodeIdList[0];
+		const nodeData = realTreeData.find((x) => x.id === nodeId);
+		be.goChapter(nodeData.tocItem.href);
+	};
 	return (
-		<div className="fixed left-0">
+		<div className="fixed left-0 overflow-auto w-96" style={{ height: "95%" }}>
 			<ReactTree
-				defaultOpenNodes={defaultOpenNodes}
+				openNodes={defaultOpenNodes}
 				nodes={realTreeData}
 				loading={loading}
 				showEmptyItems={false}
+				noIcons={true}
+				onToggleSelectedNodes={onToggleSelectedNodes}
 			></ReactTree>
 		</div>
 	);

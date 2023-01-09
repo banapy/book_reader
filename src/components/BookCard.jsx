@@ -10,7 +10,7 @@ import "react-contexify/ReactContexify.css";
 export default function Index(props) {
 	const navigate = useNavigate();
 	const onClickBook = () => {
-		navigate("/bookIntro/" + props.id);
+		navigate("/bookViewer/" + props.id);
 	};
 	const MENU_ID = props.id;
 	const { show } = useContextMenu({
@@ -34,6 +34,9 @@ export default function Index(props) {
 				break;
 			case "不爱了":
 				be.removeFavoriteBook(props.id);
+				break;
+			case "查看详情":
+				navigate("/bookIntro/" + props.id);
 				break;
 		}
 	};
@@ -63,6 +66,9 @@ export default function Index(props) {
 						爱了💕
 					</Item>
 				)}
+				<Item id="查看详情" onClick={handleItemClick}>
+					查看详情
+				</Item>
 			</Menu>
 		</div>
 	);

@@ -101,6 +101,9 @@ export default class EpubRender extends EventClass {
     prev() {
         this.rendition.prev()
     }
+    goChapter(href) {
+        this.rendition.display(href)
+    }
     initKeyboardEvent() {
         this.epubBook.ready.then(() => {
             this.keyupCb = (e) => {

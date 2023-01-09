@@ -14,6 +14,9 @@ export default class Render extends EventClass {
     get bookId() {
         return this._render.book.id
     }
+    get book() {
+        return this._render.book
+    }
     renderBook(book, eleId) {
         const _Render = Render.renderLibrary[book.metaData.format]
         this._render = new _Render(be, book, eleId)
@@ -34,6 +37,9 @@ export default class Render extends EventClass {
     }
     prev() {
         this._render.prev()
+    }
+    goChapter(href) {
+        this._render.goChapter(href)
     }
     destroy() {
         this.cancelRender()

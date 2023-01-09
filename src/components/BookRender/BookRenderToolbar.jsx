@@ -7,13 +7,13 @@ export default function Index(props) {
 	const toggleChapterMenu = () => {
 		const v = !menuShow;
 		set_menuShow(v);
-		props.menuShowChange && props.menuShowChange(v);
+		props.onMenuShowChange && props.onMenuShowChange(v);
 	};
 	const [note, set_note] = useState(false);
 	const toggleNote = () => {
 		const v = !note;
 		set_note(v);
-		props.noteChange && props.noteChange(v);
+		props.onNoteChange && props.onNoteChange(v);
 	};
 	const navigate = useNavigate();
 	return (

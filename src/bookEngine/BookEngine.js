@@ -135,6 +135,9 @@ export default class BookEngine extends EventClass {
     prev() {
         this.render.prev()
     }
+    goChapter(href){
+        this.render.goChapter(href)
+    }
     destroy() {
         this.cancelRender()
         this.render.destroy()
