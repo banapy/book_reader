@@ -118,6 +118,16 @@ export default class UserConfig {
     updateHighLight(bookid, highLight) {
         throw "no implemention"
     }
+    updatePercentage(bookId, percentage) {
+        this.model.bookTracker[bookId].percentage = percentage
+        this.model.update(this.storage)
+    }
+    getPercentage(bookId) {
+        if (this.model.bookTracker[bookId]) {
+            return this.model.bookTracker[bookId].percentage || 0
+        }
+        return 0
+    }
     addReaingRecord(options) {
         const { bookId, startTime, endTime } = options
         if (!this.model.bookTracker[bookId]) {

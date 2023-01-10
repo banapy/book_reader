@@ -1,6 +1,6 @@
 import { EventClass } from "../EventClass";
 import { readFileContent, getImgBase64FromSrc, getDefer } from '@/utils'
-
+import ePub from './epubjs/index'
 export default class EpubRender extends EventClass {
     constructor(be, book, eleId) {
         super()
@@ -11,10 +11,12 @@ export default class EpubRender extends EventClass {
         this.config = {}
         console.log(this)
         this.initDefer = getDefer()
+        this.percentage = 0
         this.init();
         ["onSelectedAndMarkClicked", "_highLight"].forEach((x) => {
             this[x] = this[x].bind(this);
         });
+        this.generatePromsie = null
     }
     async init() {
         await this.be.initDefer.promise
@@ -23,10 +25,14 @@ export default class EpubRender extends EventClass {
         const fileContent = readFileContent(blob)
         this.epubBook = ePub(fileContent, { openAs: "binary" });
         await this.epubBook.ready
-        this.initDefer.resolve(this)
+        const defer = getDefer()
+        this.generatePromsie = defer.promise
         this.epubBook.ready.then(() => {
-            this.epubBook.locations.generate();
+            this.epubBook.locations.generate().then(() => {
+                defer.resolve()
+            })
         });
+        this.initDefer.resolve(this)
         switch (readerConfig.pageTurnMode) {
             case "滚动":
                 this.rendition = this.epubBook.renderTo(this.eleId, {
@@ -54,14 +60,12 @@ export default class EpubRender extends EventClass {
         this.initKeyboardEvent();
     }
     getCurrentPercentage() {
+        if (!this.rendition) return 0
         const currentLocation = this.epubBook.rendition.currentLocation();
-        return (
-            Math.floor(
-                this.epubBook.locations
-                    .percentageFromCfi(currentLocation.start.cfi)
-                    .toFixed(5) * 10000
-            ) / 100
-        );
+        const curCfi = currentLocation.start.cfi
+        const location = this.epubBook.locations
+            .percentageFromCfi(curCfi)
+        return location * 100
     }
     initBookEvent() {
         this.rendition.on("selected", (cfiRange, contents) => {
@@ -70,9 +74,13 @@ export default class EpubRender extends EventClass {
         this.rendition.on("markClicked", (cfiRange, data, contents, a, b, c, d) => {
             console.log(cfiRange, contents, data, a, b, c, d);
             this.onSelectedAndMarkClicked(cfiRange, contents, data);
+            this._tempHandler = setTimeout(() => {
+                this._tempHandler = null
+            }, 100)
         });
         this.rendition.on("rendered", (section, iframe) => {
             iframe.window.addEventListener("click", (e) => {
+                if (this._tempHandler) return
                 this.emit("click", e);
             });
         });
@@ -83,6 +91,11 @@ export default class EpubRender extends EventClass {
     onSelectedAndMarkClicked(cfiRange, contents, userData) {
         let selection = contents.window.getSelection();
         let rect = selection.getRangeAt(0).getBoundingClientRect();
+        let ranges = []
+        for (let i = 0; i < selection.rangeCount; i++) {
+            ranges.push(selection.getRangeAt(i))
+        }
+        console.log(ranges)
         const delta = this.rendition._layout.delta;
         let x = (rect.x % delta) + this.rendition.manager.container.offsetLeft;
         let y = rect.y + this.rendition.manager.container.offsetTop;
@@ -104,6 +117,16 @@ export default class EpubRender extends EventClass {
     goChapter(href) {
         this.rendition.display(href)
     }
+    async goPercentage(percentage) {
+        await this.initDefer.promise
+        await this.generatePromsie
+        const location = this.epubBook.locations.cfiFromPercentage(percentage / 100)
+        if (location !== -1 && percentage !== 0) {
+            this.rendition.display(location)
+        } else {
+            console.error("定位上次阅读位置失败", location, percentage)
+        }
+    }
     initKeyboardEvent() {
         this.epubBook.ready.then(() => {
             this.keyupCb = (e) => {
@@ -119,7 +142,14 @@ export default class EpubRender extends EventClass {
                 }
             };
             this.rendition.on("keyup", this.keyupCb);
-            document.addEventListener("keyup", this.keyupCb, false);
+            window.addEventListener("keyup", this.keyupCb, false);
+            this.wheelCb = (e) => {
+                const percentage = this.getCurrentPercentage()
+                console.log(percentage)
+                this.percentage = percentage
+                this.emit("percentageChange", percentage)
+            }
+            window.addEventListener("wheel", this.wheelCb, false)
         });
     }
     async _highLight(highLight) {

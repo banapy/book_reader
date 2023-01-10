@@ -17,6 +17,9 @@ export default class Render extends EventClass {
     get book() {
         return this._render.book
     }
+    get percentage() {
+        return this._render.percentage
+    }
     renderBook(book, eleId) {
         const _Render = Render.renderLibrary[book.metaData.format]
         this._render = new _Render(be, book, eleId)
@@ -27,10 +30,14 @@ export default class Render extends EventClass {
         this._render.on("click", e => {
             this.emit("click", e)
         })
+        this._render.on("percentageChange", e => {
+            this.emit("percentageChange", e)
+        })
         const highLightList = this.be.getHighLightList(this.bookId)
         highLightList.forEach(highLight => {
             this.addHighLight(highLight)
         })
+        this.goPercentage(this.be.getPercentage(this.bookId))
     }
     next() {
         this._render.next()
@@ -41,6 +48,9 @@ export default class Render extends EventClass {
     goChapter(href) {
         this._render.goChapter(href)
     }
+    goPercentage(percentage) {
+        this._render.goPercentage(percentage)
+    }
     destroy() {
         this.cancelRender()
     }
@@ -48,7 +58,6 @@ export default class Render extends EventClass {
         const bookId = this.bookId
         this._render.destroy()
         const startTime = this.startTime
-        this.startTime = null
         return {
             startime: startTime,
             endTime: new Date(),

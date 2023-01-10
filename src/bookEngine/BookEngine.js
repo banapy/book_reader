@@ -35,6 +35,9 @@ export default class BookEngine extends EventClass {
         this.render.on("click", e => {
             this.emit("click", e)
         })
+        this.render.on("percentageChange", e => {
+            this.emit("percentageChange", e)
+        })
     }
     initBookMap() {
         return Book.getListFromStorage(this.storage).then(bookList => {
@@ -118,6 +121,9 @@ export default class BookEngine extends EventClass {
         this.userConfig.addHighLight(this.render.bookId, highLight)
         this.render.addHighLight(highLight)
     }
+    getPercentage(bookId){
+        return this.userConfig.getPercentage(bookId)
+    }
     removeHighLight(highLightOrId) {
         this.userConfig.removeHighLight(this.render.bookId, highLightOrId)
         this.render.removeHighLight(highLightOrId)
@@ -128,6 +134,7 @@ export default class BookEngine extends EventClass {
     cancelRender() {
         const readingRecord = this.render.cancelRender()
         this.userConfig.addReaingRecord(readingRecord)
+        this.userConfig.updatePercentage(this.render.bookId,this.render.percentage)
     }
     next() {
         this.render.next()
@@ -135,7 +142,7 @@ export default class BookEngine extends EventClass {
     prev() {
         this.render.prev()
     }
-    goChapter(href){
+    goChapter(href) {
         this.render.goChapter(href)
     }
     destroy() {
