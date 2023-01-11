@@ -4,7 +4,8 @@ import {
   Route,
   createHashRouter,
 } from "react-router-dom";
-import Home from './views/home'
+import BookRoom from './views/bookRoom'
+import BookLibrary from './views/bookLibrary'
 import Login from './views/login'
 import BookViewer from './views/bookViewer'
 import UploadBook from './views/uploadBook'
@@ -64,7 +65,12 @@ const router = createHashRouter([
   },
   {
     path: "/",
-    element: <Home></Home>,
+    element: <BookRoom></BookRoom>,
+    errorElement: <Error />,
+  },
+  {
+    path: "/bookLibrary",
+    element: <BookLibrary></BookLibrary>,
     errorElement: <Error />,
   },
 ]);

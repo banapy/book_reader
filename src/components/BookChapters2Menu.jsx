@@ -48,7 +48,7 @@ export default function Index(props) {
 		be.goChapter(nodeData.tocItem.href);
 	};
 	return (
-		<div className="fixed left-0 overflow-auto w-96" style={{ height: "95%" }}>
+		<div className="fixed left-0 overflow-auto lg:w-96 xs:w-full" style={{ height: "95%" ,zIndex:1}}>
 			<ReactTree
 				openNodes={defaultOpenNodes}
 				nodes={realTreeData}

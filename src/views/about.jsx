@@ -40,7 +40,7 @@ export default function Index() {
 	`;
 	return (
 		<Layout>
-			<ReactMarkdown>{msg}</ReactMarkdown>
+			<ReactMarkdown className="prose lg:prose-xl">{msg}</ReactMarkdown>
 		</Layout>
 	);
 }

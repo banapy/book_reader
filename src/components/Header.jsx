@@ -1,11 +1,18 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon ,LinkIcon} from "@heroicons/react/24/outline";
+import {
+	Bars3Icon,
+	BellIcon,
+	XMarkIcon,
+	LinkIcon,
+} from "@heroicons/react/24/outline";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { authAtom } from "@/atoms";
 import { useNavigate } from "react-router-dom";
 
 const navigation = [
+	{ name: "书架", path: "/", current: false, href: "" },
+	{ name: "书城", path: "/bookLibrary", current: false, href: "" },
 	{ name: "导入", path: "/uploadBook", current: false, href: "" },
 	{ name: "留言", path: "/message", current: false, href: "" },
 	{ name: "关于", path: "/about", current: false, href: "" },
@@ -78,7 +85,8 @@ export default function Index() {
 								<Disclosure.Button
 									key={item.name}
 									as="a"
-									href={item.href}
+									href={item.href ? item.href : undefined}
+									onClick={(e) => item.path && navigate(item.path)}
 									className={classNames(
 										item.current
 											? "bg-gray-900 text-white"

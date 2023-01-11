@@ -1,5 +1,4 @@
 import { Suspense, useEffect, useRef, useState } from "react";
-import MyHeader from "@/components/Header";
 import BookCard from "@/components/BookCard";
 import { authAtom } from "@/atoms";
 import { axios } from "@/api";

@@ -44,15 +44,14 @@ export default function Index(props) {
 	console.log(props.isFavorite);
 	return (
 		<div
-			className="d-flex flex-column align-items-center"
-			style={{ width: "fit-content", cursor: "pointer" }}
+			className="flex flex-col items-center cursor-pointer lg:w-28 xs:w-3/12"
 			onClick={onClickBook}
 			onContextMenu={handleContextMenu}
 		>
-			<img src={props.cover} alt="" style={{ width: "120px" }} />
-			<span className="" style={{ maxWidth: "120px" }}>
+			<img src={props.cover} alt="" className="w-full h-5/6" />
+			<div className="truncate whitespace-pre h-16 w-full line-clamp-2">
 				{props.bookName}
-			</span>
+			</div>
 			<Menu id={MENU_ID}>
 				<Item id="删除" onClick={handleItemClick}>
 					删除
@@ -76,7 +75,7 @@ export default function Index(props) {
 Index.Container = Container;
 function Container(props) {
 	return (
-		<div className="d-flex flex-wrap" style={{ gap: "10px" }}>
+		<div className="flex flex-wrap" style={{ gap: "10px" }}>
 			{props.children}
 		</div>
 	);

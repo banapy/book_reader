@@ -34,7 +34,7 @@ export default function Index(props) {
 					onDragEnd={handleDragEnd}
 				>
 					<div
-						className="position-absolute"
+						className="absolute xs:w-4/5"
 						style={{
 							left: "50%",
 							top: "50%",

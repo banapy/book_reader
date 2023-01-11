@@ -140,7 +140,7 @@ export default function Index(props) {
 				>
 					<button
 						type="button"
-						class=" inline-block px-6 py-2.5 bg-gray-800 text-white font-medium text-xs leading-tight uppercase hover:bg-gray-400 focus:bg-gray-400 focus:outline-none focus:ring-0 active:bg-blue-800 transition duration-150 ease-in-out"
+						class=" inline-block lg:px-6 xs:px-2 lg:py-2.5 xs:py-1 xs:w-16 bg-gray-800 text-white font-medium lg:text-xs xs:text-sm leading-tight uppercase hover:bg-gray-400 focus:bg-gray-400 focus:outline-none focus:ring-0 active:bg-blue-800 transition duration-150 ease-in-out"
 						onClick={(e) => {
 							copyTextToClipboard(highLight.text);
 						}}
@@ -149,7 +149,7 @@ export default function Index(props) {
 					</button>
 					<button
 						type="button"
-						class=" inline-block px-6 py-2.5 bg-gray-800 text-white font-medium text-xs leading-tight uppercase hover:bg-gray-400 focus:bg-gray-400 focus:outline-none focus:ring-0 active:bg-blue-800 transition duration-150 ease-in-out"
+						class=" inline-block lg:px-6 xs:px-2 lg:py-2.5 xs:py-1 xs:w-16 bg-gray-800 text-white font-medium lg:text-xs xs:text-sm leading-tight uppercase hover:bg-gray-400 focus:bg-gray-400 focus:outline-none focus:ring-0 active:bg-blue-800 transition duration-150 ease-in-out"
 						onClick={(e) => {
 							setHighLight("highlight");
 						}}
@@ -158,7 +158,7 @@ export default function Index(props) {
 					</button>
 					<button
 						type="button"
-						class=" inline-block px-6 py-2.5 bg-gray-800 text-white font-medium text-xs leading-tight uppercase hover:bg-gray-400 focus:bg-gray-400 focus:outline-none focus:ring-0 active:bg-blue-800 transition duration-150 ease-in-out"
+						class=" inline-block lg:px-6 xs:px-2 lg:py-2.5 xs:py-1 xs:w-16 bg-gray-800 text-white font-medium lg:text-xs xs:text-sm leading-tight uppercase hover:bg-gray-400 focus:bg-gray-400 focus:outline-none focus:ring-0 active:bg-blue-800 transition duration-150 ease-in-out"
 						onClick={(e) => {
 							setHighLight("underline");
 						}}
@@ -167,7 +167,7 @@ export default function Index(props) {
 					</button>
 					<button
 						type="button"
-						class=" inline-block px-6 py-2.5 bg-gray-800 text-white font-medium text-xs leading-tight uppercase hover:bg-gray-400 focus:bg-gray-400 focus:outline-none focus:ring-0 active:bg-blue-800 transition duration-150 ease-in-out"
+						class=" inline-block lg:px-6 xs:px-2 lg:py-2.5 xs:py-1 xs:w-16 bg-gray-800 text-white font-medium lg:text-xs xs:text-sm leading-tight uppercase hover:bg-gray-400 focus:bg-gray-400 focus:outline-none focus:ring-0 active:bg-blue-800 transition duration-150 ease-in-out"
 						onClick={(e) => {
 							setHighLight("mark");
 						}}
@@ -176,7 +176,7 @@ export default function Index(props) {
 					</button>
 					<button
 						type="button"
-						class=" inline-block px-6 py-2.5 bg-gray-800 text-white font-medium text-xs leading-tight uppercase hover:bg-gray-400 focus:bg-gray-400 focus:outline-none focus:ring-0 active:bg-blue-800 transition duration-150 ease-in-out"
+						class=" inline-block lg:px-6 xs:px-2 lg:py-2.5 xs:py-1 xs:w-16 bg-gray-800 text-white font-medium lg:text-xs xs:text-sm leading-tight uppercase hover:bg-gray-400 focus:bg-gray-400 focus:outline-none focus:ring-0 active:bg-blue-800 transition duration-150 ease-in-out"
 						onClick={(e) => {
 							setHighLight("删除划线");
 						}}
@@ -185,7 +185,7 @@ export default function Index(props) {
 					</button>
 					<button
 						type="button"
-						class=" inline-block px-6 py-2.5 bg-gray-800 text-white font-medium text-xs leading-tight uppercase hover:bg-gray-400 focus:bg-gray-400 focus:outline-none focus:ring-0 active:bg-blue-800 transition duration-150 ease-in-out"
+						class=" inline-block lg:px-6 xs:px-2 lg:py-2.5 xs:py-1 xs:w-16 bg-gray-800 text-white font-medium lg:text-xs xs:text-sm leading-tight uppercase hover:bg-gray-400 focus:bg-gray-400 focus:outline-none focus:ring-0 active:bg-blue-800 transition duration-150 ease-in-out"
 						onClick={(e) => {
 							set_highLight({
 								...highLight,
@@ -197,7 +197,7 @@ export default function Index(props) {
 					</button>
 					<button
 						type="button"
-						class=" inline-block px-6 py-2.5 bg-gray-800 text-white font-medium text-xs leading-tight uppercase hover:bg-gray-400 focus:bg-gray-400 focus:outline-none focus:ring-0 active:bg-blue-800 transition duration-150 ease-in-out"
+						class=" inline-block lg:px-6 xs:px-2 lg:py-2.5 xs:py-1 xs:w-16 bg-gray-800 text-white font-medium lg:text-xs xs:text-sm leading-tight uppercase hover:bg-gray-400 focus:bg-gray-400 focus:outline-none focus:ring-0 active:bg-blue-800 transition duration-150 ease-in-out"
 						onClick={(e) => {
 							set_highLight({
 								...highLight,
